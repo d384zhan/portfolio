@@ -184,8 +184,8 @@ export default function Portfolio() {
       ></div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-12 lg:px-24 py-8 text-sm bg-gradient-to-b from-[#152a38] to-transparent">
-        <div className="flex gap-3 items-center">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-8 text-xs md:text-sm bg-gradient-to-b from-[#152a38] to-transparent">
+        <div className="flex gap-1.5 sm:gap-2 md:gap-3 items-center text-[10px] sm:text-xs md:text-sm">
           <Link href="#about" className="hover:underline hover:text-[#d2c1b6] transition-all">
             about
           </Link>
@@ -198,7 +198,7 @@ export default function Portfolio() {
             projects
           </Link>
         </div>
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-1.5 sm:gap-2 md:gap-3 items-center text-[10px] sm:text-xs md:text-sm">
           <Link href="https://www.linkedin.com/in/dawang-zhang" className="hover:underline hover:text-[#d2c1b6] transition-all">
             linkedin
           </Link>
@@ -215,62 +215,54 @@ export default function Portfolio() {
 
       {/* Hero Section */}
       <section id="about" className="h-screen snap-start snap-always flex items-center justify-center relative">
-        <div className="max-w-7xl mx-auto px-12 lg:px-24 w-full">
-          <div className="flex flex-col md:flex-row gap-16 items-center justify-center">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 w-full">
+          <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center justify-center">
             <div className="w-full md:w-1/2 flex justify-center">
               <Image
                 src="/me.PNG"
                 alt="Profile photo"
                 width={600}
                 height={700}
-                className="w-full max-w-lg h-auto shadow-2xl"
+                className="w-full max-w-sm md:max-w-lg h-auto shadow-2xl"
               />
             </div>
-            <div className="w-full md:w-1/2 space-y-6">
-              <h1 className="text-5xl md:text-6xl drop-shadow-2xl">
+            <div className="w-full md:w-1/2 space-y-4 md:space-y-6">
+              <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl drop-shadow-2xl">
                 yo, i'm <span 
                   className="italic font-bold relative inline-block cursor-help"
                   onMouseEnter={() => setShowDawangTooltip(true)}
                   onMouseLeave={() => setShowDawangTooltip(false)}
                 >
                   Dawang
-                  {/* Red squiggly underline */}
-                  <svg className="absolute -bottom-1 left-0 w-full h-2" preserveAspectRatio="none" viewBox="0 0 100 10">
-                    <path 
-                      d="M 0 5 Q 2.5 0, 5 5 T 10 5 T 15 5 T 20 5 T 25 5 T 30 5 T 35 5 T 40 5 T 45 5 T 50 5 T 55 5 T 60 5 T 65 5 T 70 5 T 75 5 T 80 5 T 85 5 T 90 5 T 95 5 T 100 5" 
-                      stroke="#ef4444" 
-                      strokeWidth="1.5" 
-                      fill="none"
-                    />
-                  </svg>
+                  {/* Red underline - changed from squiggly to straight line to match design language */}
+                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ef4444]"></div>
                   {/* Tooltip */}
                   {showDawangTooltip && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-[#152a38] border-2 border-[#d2c1b6] rounded-lg px-4 py-3 whitespace-nowrap z-50 shadow-2xl"
+                      transition={{ duration: 0.2 }}
+                      className="absolute left-1/2 -translate-x-1/2 top-full mt-3 bg-[#d2c1b6] border-2 border-[#152a38] px-4 py-3 whitespace-nowrap z-50 shadow-2xl"
                     >
-                      <div className="text-sm text-white text-center">
-                        <p className="font-bold text-[#d2c1b6] mb-1">Dawang (大王)</p>
+                      <div className="text-sm text-[#152a38] text-center">
+                        <p className="font-bold text-[#152a38] mb-1">Dawang (大王)</p>
                         <p className="text-xs">means "emperor" or "big king" in Chinese!</p>
                       </div>
-                      {/* Arrow pointing up */}
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-[#d2c1b6]"></div>
                     </motion.div>
                   )}
                 </span>!
               </h1>
-              <p className="text-base leading-relaxed">
-                i'm currently a second year <Link href="https://uwaterloo.ca/engineering/future-students/management-engineering" target="_blank" className="text-[#d2c1b6] text-xl italic underline hover:opacity-80 inline-flex items-center gap-1">
+              <p className="text-sm md:text-base leading-relaxed">
+                i'm currently a second year <Link href="https://uwaterloo.ca/engineering/future-students/management-engineering" target="_blank" className="text-[#d2c1b6] text-lg md:text-xl italic underline hover:opacity-80 inline-flex items-center gap-1">
                   Management Engineering
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </Link> student at Waterloo.
               </p>
-              <p className="text-base leading-relaxed">i enjoy seeing ideas come to life through tech!</p>
-              <p className="text-base leading-relaxed">
-                in my free time, you might find me watching <Link href="https://letterboxd.com/dzahwa/" target="_blank" className="text-[#d2c1b6] text-xl underline hover:opacity-80 inline-flex items-center gap-1">
+              <p className="text-sm md:text-base leading-relaxed">i enjoy seeing ideas come to life through tech!</p>
+              <p className="text-sm md:text-base leading-relaxed">
+                in my free time, you might find me watching <Link href="https://letterboxd.com/dzahwa/" target="_blank" className="text-[#d2c1b6] text-lg md:text-xl underline hover:opacity-80 inline-flex items-center gap-1">
                   movies
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -280,12 +272,12 @@ export default function Portfolio() {
             </div>
           </div>
           <motion.div 
-            className="text-center mt-12 absolute bottom-12 left-0 right-0"
+            className="text-center mt-6 md:mt-12 absolute bottom-6 md:bottom-12 left-0 right-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <p className="text-sm">scroll for more...</p>
+            <p className="text-xs md:text-sm">scroll for more...</p>
             <motion.div 
               className="mt-2"
               animate={{ y: [0, 10, 0] }}
@@ -301,20 +293,20 @@ export default function Portfolio() {
       {/* Experience Section */}
       <section id="experience" className="h-screen snap-start snap-always relative overflow-hidden flex flex-col">
         {/* Title and subtitle aligned with projects section */}
-        <div className="max-w-6xl mx-auto px-12 lg:px-20 w-full pt-28">
-          <h2 className="text-4xl md:text-5xl italic mb-3">experience</h2>
-          <p className="text-sm text-white/70">hover over a bar to see details!</p>
+        <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 w-full pt-16 md:pt-20 lg:pt-28">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl italic mb-1 md:mb-2 lg:mb-3">experience</h2>
+          <p className="text-[10px] md:text-xs lg:text-sm text-white/70">hover over a bar to see details!</p>
         </div>
         
         {/* Timeline centered vertically in remaining space */}
-        <div className="flex-1 flex items-center justify-center">
-          <div className="max-w-7xl mx-auto px-12 lg:px-24 w-full">
+        <div className="flex-1 flex items-center justify-center overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 md:px-12 lg:px-24 w-full">
             {/* Bar-Based Timeline */}
-            <div className="relative w-full h-[500px] px-16">
+            <div className="relative w-full h-[280px] sm:h-[320px] md:h-[420px] lg:h-[500px] px-2 md:px-8 lg:px-16">
             {/* Sticker Images - Larger and positioned near respective companies */}
-            {/* Prosthetic near Sunnybrook - moved 128px further left */}
+            {/* Prosthetic near Sunnybrook - moved 128px further left - Hidden on mobile */}
             <motion.div
-              className="absolute w-32 h-32 pointer-events-none z-20"
+              className="hidden lg:block absolute w-32 h-32 pointer-events-none z-20"
               style={{ 
                 left: 'calc(5% - 128px)',
                 top: '35%',
@@ -336,9 +328,9 @@ export default function Portfolio() {
               />
             </motion.div>
 
-            {/* Ginger near Greenhouse sections - moved 128px further right */}
+            {/* Ginger near Greenhouse sections - moved 128px further right - Hidden on mobile */}
             <motion.div
-              className="absolute w-36 h-36 pointer-events-none z-20"
+              className="hidden lg:block absolute w-36 h-36 pointer-events-none z-20"
               style={{ 
                 right: 'calc(10% - 128px)',
                 top: '55%',
@@ -361,32 +353,31 @@ export default function Portfolio() {
             </motion.div>
 
             {/* Timeline Labels */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-16 text-xs text-[#d2c1b6]/50">
+            <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
               Feb 2023
             </div>
-            <div className="absolute top-1/2 -translate-y-1/2 right-16 text-xs text-[#d2c1b6]/50">
+            <div className="absolute top-1/2 -translate-y-1/2 right-2 md:right-8 lg:right-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
               Present
             </div>
 
             {/* Main Timeline Line */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-16 right-16 h-0.5 bg-gradient-to-r from-white/20 via-[#d2c1b6]/40 to-white/20"></div>
+            <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-0.5 bg-gradient-to-r from-white/20 via-[#d2c1b6]/40 to-white/20 shadow-sm"></div>
             
             {/* Timeline Bars */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-16 right-16 h-56">
+            <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-36 sm:h-44 md:h-52 lg:h-56">
               {experiences.map((exp, index) => {
                 const isHovered = hoveredRole === exp.id;
-                // Calculate vertical position based on track
-                // track -1 (above): -70px, track 0 (center): 0px, track 1 (below): 70px
-                const verticalOffset = exp.track * 70;
+                // Calculate vertical position based on track - uses CSS variables for responsive spacing
+                // Small: 45px | Medium: 52px | Tablet: 60px | Desktop: 70px
                 
                 return (
                   <div
                     key={exp.id}
-                    className="absolute -translate-y-1/2 cursor-pointer z-10"
+                    className="timeline-bar absolute -translate-y-1/2 cursor-pointer z-10"
                     style={{
                       left: `${exp.startPosition}%`,
                       width: `${exp.width}%`,
-                      top: `calc(50% + ${verticalOffset}px)`
+                      top: exp.track === 0 ? '50%' : `calc(50% + calc(var(--track-offset) * ${exp.track}))`,
                     }}
                     onMouseEnter={() => setHoveredRole(exp.id)}
                     onMouseLeave={() => setHoveredRole(null)}
@@ -394,9 +385,9 @@ export default function Portfolio() {
                     {/* Connecting Line to Timeline */}
                     {exp.track !== 0 && (
                       <div 
-                        className="absolute left-1/2 -translate-x-1/2 w-px bg-white/10"
+                        className="absolute left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-white/15 to-white/5"
                         style={{
-                          height: `${Math.abs(verticalOffset)}px`,
+                          height: 'var(--line-height)',
                           top: exp.track === -1 ? '100%' : 'auto',
                           bottom: exp.track === 1 ? '100%' : 'auto'
                         }}
@@ -406,28 +397,30 @@ export default function Portfolio() {
                     {/* Morphing Bar Container */}
                     <motion.div
                       className={`relative bg-[#d2c1b6] border-2 border-[#152a38] shadow-lg overflow-hidden transition-all duration-200 ${isHovered ? 'brightness-110 shadow-2xl' : ''}`}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.2 }}
                     >
                       {/* Description - expands above/below */}
                       <motion.div
-                        className={`px-4 ${
+                        className={`px-2 md:px-4 ${
                           exp.track === -1 ? 'order-first' : 'order-last'
                         }`}
                         initial={false}
                         animate={{ 
                           height: isHovered ? 'auto' : 0,
                           opacity: isHovered ? 1 : 0,
-                          paddingTop: isHovered ? '12px' : 0,
+                          paddingTop: isHovered ? '8px' : 0,
                           paddingBottom: isHovered ? '4px' : 0,
                         }}
                         transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                       >
-                        <p className="text-[11px] text-[#1b3c53] leading-snug">
+                        <p className="text-[9px] md:text-[11px] text-[#1b3c53] leading-snug">
                           {exp.description}
                         </p>
                       </motion.div>
 
                       {/* Main Bar Content - always visible */}
-                      <div className="h-18 px-4 py-3 flex flex-col justify-center overflow-hidden">
+                      <div className="h-14 md:h-16 lg:h-18 px-2 md:px-4 py-2 md:py-3 flex flex-col justify-center overflow-hidden">
                         {/* Continuous scrolling company name - carousel style */}
                         <div 
                           ref={(el) => { containerRefs.current[`company-${exp.id}`] = el }}
@@ -449,24 +442,24 @@ export default function Portfolio() {
                             >
                               <p
                                 ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
-                                className="text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12"
+                                className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12"
                               >
                                 {exp.company}
                               </p>
-                              <p className="text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
+                              <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
                                 {exp.company}
                               </p>
-                              <p className="text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
+                              <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
                                 {exp.company}
                               </p>
-                              <p className="text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
+                              <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
                                 {exp.company}
                               </p>
                             </motion.div>
                           ) : (
                             <p
                               ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
-                              className="text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap"
+                              className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap"
                             >
                               {exp.company}
                             </p>
@@ -493,24 +486,24 @@ export default function Portfolio() {
                             >
                               <p
                                 ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
-                                className="text-xs text-[#152a38]/70 whitespace-nowrap pr-12"
+                                className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12"
                               >
                                 {exp.title}
                               </p>
-                              <p className="text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
+                              <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
                                 {exp.title}
                               </p>
-                              <p className="text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
+                              <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
                                 {exp.title}
                               </p>
-                              <p className="text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
+                              <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
                                 {exp.title}
                               </p>
                             </motion.div>
                           ) : (
                             <p
                               ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
-                              className="text-xs text-[#152a38]/70 whitespace-nowrap"
+                              className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap"
                             >
                               {exp.title}
                             </p>
@@ -521,19 +514,19 @@ export default function Portfolio() {
 
                     {/* Date Labels */}
                     <div 
-                      className="absolute left-0 text-[11px] text-white/40 whitespace-nowrap font-mono"
+                      className="absolute left-0 text-[8px] md:text-[10px] lg:text-[11px] text-white/40 whitespace-nowrap font-mono"
                       style={{
-                        top: exp.track === -1 ? '-24px' : 'auto',
-                        bottom: exp.track === -1 ? 'auto' : '-24px'
+                        top: exp.track === -1 ? '-18px' : 'auto',
+                        bottom: exp.track === -1 ? 'auto' : '-18px'
                       }}
                     >
                       {exp.startDate}
                     </div>
                     <div 
-                      className="absolute right-0 text-[10px] text-white/50 whitespace-nowrap"
+                      className="absolute right-0 text-[8px] md:text-[9px] lg:text-[10px] text-white/50 whitespace-nowrap"
                       style={{
-                        top: exp.track === -1 ? '-24px' : 'auto',
-                        bottom: exp.track === -1 ? 'auto' : '-24px'
+                        top: exp.track === -1 ? '-18px' : 'auto',
+                        bottom: exp.track === -1 ? 'auto' : '-18px'
                       }}
                     >
                       {exp.endDate}
@@ -549,11 +542,11 @@ export default function Portfolio() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="h-screen snap-start snap-always flex flex-col justify-center relative py-20">
-        <div className="max-w-6xl mx-auto px-12 lg:px-20 w-full">
-          <h2 className="text-3xl md:text-4xl italic text-right mb-6">projects</h2>
+      <section id="projects" className="min-h-screen md:h-screen snap-start snap-always flex flex-col justify-center relative py-8 md:py-12 lg:py-20 overflow-y-auto md:overflow-visible">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 w-full">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl italic text-right mb-3 md:mb-4 lg:mb-6">projects</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
             {projects.map((project, i) => {
               const visibleTags = project.technologies.slice(0, project.maxTags)
               const remainingCount = project.technologies.length - project.maxTags
@@ -561,7 +554,7 @@ export default function Portfolio() {
               return (
                 <motion.div 
                   key={i} 
-                  className="bg-[#d2c1b6] text-black p-3 flex flex-col justify-between shadow-2xl border-2 border-[#152a38] cursor-pointer"
+                  className="bg-[#d2c1b6] text-black p-2 md:p-3 flex flex-col justify-between shadow-2xl border-2 border-[#152a38] cursor-pointer"
                   whileHover={{ 
                     scale: 1.02,
                     boxShadow: '0 25px 50px -12px rgba(210, 193, 182, 0.25)'
@@ -569,17 +562,17 @@ export default function Portfolio() {
                   transition={{ duration: 0.2 }}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-bold">{project.title}</h3>
+                    <div className="flex items-center justify-between mb-1 md:mb-2">
+                      <h3 className="text-base md:text-lg font-bold">{project.title}</h3>
                       {project.github !== "#" && (
                         <Link href={project.github} target="_blank" className="text-[#1b3c53] hover:opacity-70 transition-opacity">
-                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                           </svg>
                         </Link>
                       )}
                     </div>
-                    <div className="w-full bg-white/30 mb-2 overflow-hidden relative" style={{ aspectRatio: '1.618 / 1' }}>
+                    <div className="w-full bg-white/30 mb-1 md:mb-2 overflow-hidden relative" style={{ aspectRatio: '1.618 / 1' }}>
                       <Image
                         src={project.image}
                         alt={project.title}
@@ -589,7 +582,7 @@ export default function Portfolio() {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs mb-2 leading-tight">{project.description}</p>
+                    <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
                     <div className="flex flex-wrap gap-1">
                       {visibleTags.map((tech, idx) => (
                         <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px]">{tech}</span>
@@ -609,14 +602,14 @@ export default function Portfolio() {
 
       {/* Footer */}
       <section className="h-screen snap-start snap-always flex flex-col justify-center relative">
-        <div className="max-w-7xl mx-auto px-12 lg:px-24 text-center w-full">
-          <h2 className="text-4xl md:text-5xl italic mb-8">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 text-center w-full">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl italic mb-6 md:mb-8">
             unfortunately,
             <br />
             that's it!
           </h2>
-          <p className="text-sm mb-20">wanna chat further? you can find my contact in the top right!</p>
-          <Link href="#about" className="text-sm hover:opacity-70 transition-opacity inline-block">
+          <p className="text-xs md:text-sm mb-12 md:mb-20">wanna chat further? you can find my contact in the top right!</p>
+          <Link href="#about" className="text-xs md:text-sm hover:opacity-70 transition-opacity inline-block">
             <div className="mb-2">^</div>
             <div>back to top!</div>
           </Link>
