@@ -27,12 +27,12 @@ export default function Portfolio() {
       })
       setOverflowState(newOverflowState)
     }
-    
+
     // Check multiple times to ensure DOM is fully ready
     checkOverflow()
     const timer1 = setTimeout(checkOverflow, 50)
     const timer2 = setTimeout(checkOverflow, 200)
-    
+
     // Recheck on window resize
     window.addEventListener('resize', checkOverflow)
     return () => {
@@ -55,22 +55,22 @@ export default function Portfolio() {
   // Total visual width: 5 + 8 + 2 = 15 month-equivalents
   // Scale factor: 100 / 15 = 6.67% per month-equivalent
   const experiences = [
-    { 
-      id: 1, 
-      title: "Data Intern", 
-      company: "Sunnybrook Health Science Centre", 
+    {
+      id: 1,
+      title: "Data Intern",
+      company: "Sunnybrook Health Science Centre",
       startDate: "Feb 2023",
       endDate: "June 2023",
       duration: 5,
-      startPosition: 0, 
+      startPosition: 0,
       width: 33.33, // (5/15) × 100 = 33.33%
       track: 0,
       description: "data analysis, visualization, and financial reporting under finance and ops"
     },
-    { 
-      id: 2, 
-      title: "Software Developer", 
-      company: "Midnight Sun Solar Rayce Car Team", 
+    {
+      id: 2,
+      title: "Software Developer",
+      company: "Midnight Sun Solar Rayce Car Team",
       startDate: "Jan 2025",
       endDate: "Apr 2025",
       duration: 4,
@@ -79,10 +79,10 @@ export default function Portfolio() {
       track: -1,
       description: "backend telemetry and signal decoding for solar car dashboards"
     },
-    { 
-      id: 3, 
-      title: "Product/Software Engineer", 
-      company: "Wat.ai", 
+    {
+      id: 3,
+      title: "Product/Software Engineer",
+      company: "Wat.ai",
       startDate: "Feb 2025",
       endDate: "Aug 2025",
       duration: 7,
@@ -91,10 +91,10 @@ export default function Portfolio() {
       track: 1,
       description: "orecast team, eda, product design, and benchmarking for machine learning in oil drilling applications"
     },
-    { 
-      id: 4, 
-      title: "Operations Analyst", 
-      company: "Greenhouse Juice Company", 
+    {
+      id: 4,
+      title: "Operations Analyst",
+      company: "Greenhouse Juice Company",
       startDate: "May 2025",
       endDate: "Aug 2025",
       duration: 4,
@@ -103,10 +103,10 @@ export default function Portfolio() {
       track: -1,
       description: "procurement, workflow automation, building internal apps & data engineering"
     },
-    { 
-      id: 5, 
-      title: "Data/Software Engineer", 
-      company: "Greenhouse Juice Company", 
+    {
+      id: 5,
+      title: "Data/Software Engineer",
+      company: "Greenhouse Juice Company",
       startDate: "Sep 2025",
       endDate: "Present",
       duration: 2,
@@ -119,51 +119,51 @@ export default function Portfolio() {
 
   // Project data with all technologies
   const projects = [
-    { 
-      title: "coinpilot", 
-      description: "ai-powered crypto market sim", 
-      technologies: ["next.js", "python", "flask", "supabase", "gemini api", "coinbase api"], 
-      github: "https://github.com/d384zhan/htv-x", 
+    {
+      title: "coinpilot",
+      description: "ai-powered crypto market sim",
+      technologies: ["next.js", "python", "flask", "supabase", "gemini api", "coinbase api"],
+      github: "https://github.com/d384zhan/htv-x",
       maxTags: 4,
       image: "/coinpilot.png"
     },
-    { 
-      title: "familink", 
-      description: "family connection platform", 
-      technologies: ["react.js", "node.js", "firebase", "openai api"], 
-      github: "https://github.com/d384zhan/familink.ai", 
+    {
+      title: "familink",
+      description: "family connection platform",
+      technologies: ["react.js", "node.js", "firebase", "openai api"],
+      github: "https://github.com/d384zhan/familink.ai",
       maxTags: 4,
       image: "/familink.png"
     },
-    { 
-      title: "financial planner", 
-      description: "excel financial tracker", 
-      technologies: ["vba", "userforms"], 
-      github: "https://github.com/d384zhan/Financial_Planner", 
+    {
+      title: "financial planner",
+      description: "excel financial tracker",
+      technologies: ["vba", "userforms"],
+      github: "https://github.com/d384zhan/Financial_Planner",
       maxTags: 2,
       image: "/financial-planner.png"
     },
-    { 
-      title: "excel calendar", 
-      description: "interactive calendar system", 
-      technologies: ["vba", "userforms"], 
-      github: "https://github.com/d384zhan/TimeManagement_Tool", 
+    {
+      title: "excel calendar",
+      description: "interactive calendar system",
+      technologies: ["vba", "userforms"],
+      github: "https://github.com/d384zhan/TimeManagement_Tool",
       maxTags: 2,
       image: "/excel-calendar.png"
     },
-    { 
-      title: "rnow rewards", 
-      description: "loyalty program design, 3rd national", 
-      technologies: ["case competition"], 
-      github: "#", 
+    {
+      title: "rnow rewards",
+      description: "loyalty program design, 3rd national",
+      technologies: ["case competition"],
+      github: "#",
       maxTags: 1,
       image: "/rnow-rewards.png"
     },
-    { 
-      title: "connect four", 
-      description: "classic game with OOP design", 
-      technologies: ["java", "swing", "awt"], 
-      github: "https://github.com/d384zhan/ConnectFour", 
+    {
+      title: "connect four",
+      description: "classic game with OOP design",
+      technologies: ["java", "swing", "awt"],
+      github: "https://github.com/d384zhan/ConnectFour",
       maxTags: 3,
       image: "/connect-four.png"
     },
@@ -172,7 +172,7 @@ export default function Portfolio() {
   return (
     <div className="h-screen overflow-y-scroll snap-y snap-mandatory bg-[#1b3c53] text-white font-mono scrollbar-custom relative">
       {/* Background Grid Pattern */}
-      <div 
+      <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
           backgroundImage: `
@@ -186,17 +186,44 @@ export default function Portfolio() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-4 sm:px-6 md:px-12 lg:px-24 py-4 md:py-8 text-xs md:text-sm bg-gradient-to-b from-[#152a38] to-transparent">
         <div className="flex gap-1.5 sm:gap-2 md:gap-3 items-center text-[10px] sm:text-xs md:text-sm">
-          <Link href="#about" className="hover:underline hover:text-[#d2c1b6] transition-all">
-            about
-          </Link>
+          <div
+            className="cursor-pointer"
+            onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <motion.span
+              className="inline-block hover:text-[#d2c1b6] transition-colors"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              about
+            </motion.span>
+          </div>
           <span>-&gt;</span>
-          <Link href="#experience" className="hover:underline hover:text-[#d2c1b6] transition-all">
-            experience
-          </Link>
+          <div
+            className="cursor-pointer"
+            onClick={() => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <motion.span
+              className="inline-block hover:text-[#d2c1b6] transition-colors"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              experience
+            </motion.span>
+          </div>
           <span>-&gt;</span>
-          <Link href="#projects" className="hover:underline hover:text-[#d2c1b6] transition-all">
-            projects
-          </Link>
+          <div
+            className="cursor-pointer"
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <motion.span
+              className="inline-block hover:text-[#d2c1b6] transition-colors"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              projects
+            </motion.span>
+          </div>
         </div>
         <div className="flex gap-1.5 sm:gap-2 md:gap-3 items-center text-[10px] sm:text-xs md:text-sm">
           <Link href="https://www.linkedin.com/in/dawang-zhang" className="hover:underline hover:text-[#d2c1b6] transition-all">
@@ -228,7 +255,7 @@ export default function Portfolio() {
             </div>
             <div className="w-full md:w-1/2 space-y-4 md:space-y-6">
               <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl drop-shadow-2xl">
-                yo, i'm <span 
+                yo, i'm <span
                   className="italic font-bold relative inline-block cursor-help"
                   onMouseEnter={() => setShowDawangTooltip(true)}
                   onMouseLeave={() => setShowDawangTooltip(false)}
@@ -271,17 +298,22 @@ export default function Portfolio() {
               </p>
             </div>
           </div>
-          <motion.div 
+          <motion.div
             className="text-center mt-6 md:mt-12 absolute bottom-6 md:bottom-12 left-0 right-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
             <p className="text-xs md:text-sm">scroll for more...</p>
-            <motion.div 
-              className="mt-2"
+            <motion.div
+              className="mt-2 cursor-pointer"
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => {
+                document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               ▼
             </motion.div>
@@ -297,246 +329,245 @@ export default function Portfolio() {
           <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl italic mb-1 md:mb-2 lg:mb-3">experience</h2>
           <p className="text-[10px] md:text-xs lg:text-sm text-white/70">hover over a bar to see details!</p>
         </div>
-        
+
         {/* Timeline centered vertically in remaining space */}
         <div className="flex-1 flex items-center justify-center overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 md:px-12 lg:px-24 w-full">
             {/* Bar-Based Timeline */}
             <div className="relative w-full h-[280px] sm:h-[320px] md:h-[420px] lg:h-[500px] px-2 md:px-8 lg:px-16">
-            {/* Sticker Images - Larger and positioned near respective companies */}
-            {/* Prosthetic near Sunnybrook - moved 128px further left - Hidden on mobile */}
-            <motion.div
-              className="hidden lg:block absolute w-32 h-32 pointer-events-none z-20"
-              style={{ 
-                left: 'calc(5% - 128px)',
-                top: '35%',
-                rotate: -15 
-              }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <Image
-                src="/prosthetic.png"
-                alt="Prosthetic sticker"
-                width={128}
-                height={128}
-                className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(210,193,182,0.4)]"
-                style={{ 
-                  filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.8)) drop-shadow(0 0 1px rgba(255,255,255,0.9))',
+              {/* Sticker Images - Larger and positioned near respective companies */}
+              {/* Prosthetic near Sunnybrook - moved 128px further left - Hidden on mobile */}
+              <motion.div
+                className="hidden lg:block absolute w-32 h-32 pointer-events-none z-20"
+                style={{
+                  left: 'calc(5% - 128px)',
+                  top: '35%',
+                  rotate: -15
                 }}
-              />
-            </motion.div>
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Image
+                  src="/prosthetic.png"
+                  alt="Prosthetic sticker"
+                  width={128}
+                  height={128}
+                  className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(210,193,182,0.4)]"
+                  style={{
+                    filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.8)) drop-shadow(0 0 1px rgba(255,255,255,0.9))',
+                  }}
+                />
+              </motion.div>
 
-            {/* Ginger near Greenhouse sections - moved 128px further right - Hidden on mobile */}
-            <motion.div
-              className="hidden lg:block absolute w-36 h-36 pointer-events-none z-20"
-              style={{ 
-                right: 'calc(10% - 128px)',
-                top: '55%',
-                rotate: 12 
-              }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Image
-                src="/ginger.png"
-                alt="Ginger sticker"
-                width={144}
-                height={144}
-                className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(210,193,182,0.4)]"
-                style={{ 
-                  filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.8)) drop-shadow(0 0 1px rgba(255,255,255,0.9))',
+              {/* Ginger near Greenhouse sections - moved 128px further right - Hidden on mobile */}
+              <motion.div
+                className="hidden lg:block absolute w-36 h-36 pointer-events-none z-20"
+                style={{
+                  right: 'calc(10% - 128px)',
+                  top: '55%',
+                  rotate: 12
                 }}
-              />
-            </motion.div>
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <Image
+                  src="/ginger.png"
+                  alt="Ginger sticker"
+                  width={144}
+                  height={144}
+                  className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(210,193,182,0.4)]"
+                  style={{
+                    filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.8)) drop-shadow(0 0 1px rgba(255,255,255,0.9))',
+                  }}
+                />
+              </motion.div>
 
-            {/* Timeline Labels */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
-              Feb 2023
-            </div>
-            <div className="absolute top-1/2 -translate-y-1/2 right-2 md:right-8 lg:right-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
-              Present
-            </div>
+              {/* Timeline Labels */}
+              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
+                Feb 2023
+              </div>
+              <div className="absolute top-1/2 -translate-y-1/2 right-2 md:right-8 lg:right-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
+                Present
+              </div>
 
-            {/* Main Timeline Line */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-0.5 bg-gradient-to-r from-white/20 via-[#d2c1b6]/40 to-white/20 shadow-sm"></div>
-            
-            {/* Timeline Bars */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-36 sm:h-44 md:h-52 lg:h-56">
-              {experiences.map((exp, index) => {
-                const isHovered = hoveredRole === exp.id;
-                // Calculate vertical position based on track - uses CSS variables for responsive spacing
-                // Small: 45px | Medium: 52px | Tablet: 60px | Desktop: 70px
-                
-                return (
-                  <div
-                    key={exp.id}
-                    className="timeline-bar absolute -translate-y-1/2 cursor-pointer z-10"
-                    style={{
-                      left: `${exp.startPosition}%`,
-                      width: `${exp.width}%`,
-                      top: exp.track === 0 ? '50%' : `calc(50% + calc(var(--track-offset) * ${exp.track}))`,
-                    }}
-                    onMouseEnter={() => setHoveredRole(exp.id)}
-                    onMouseLeave={() => setHoveredRole(null)}
-                  >
-                    {/* Connecting Line to Timeline */}
-                    {exp.track !== 0 && (
-                      <div 
-                        className="absolute left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-white/15 to-white/5"
-                        style={{
-                          height: 'var(--line-height)',
-                          top: exp.track === -1 ? '100%' : 'auto',
-                          bottom: exp.track === 1 ? '100%' : 'auto'
-                        }}
-                      />
-                    )}
+              {/* Main Timeline Line */}
+              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-0.5 bg-gradient-to-r from-white/20 via-[#d2c1b6]/40 to-white/20 shadow-sm"></div>
 
-                    {/* Morphing Bar Container */}
-                    <motion.div
-                      className={`relative bg-[#d2c1b6] border-2 border-[#152a38] shadow-lg overflow-hidden transition-all duration-200 ${isHovered ? 'brightness-110 shadow-2xl' : ''}`}
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
+              {/* Timeline Bars */}
+              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-36 sm:h-44 md:h-52 lg:h-56">
+                {experiences.map((exp, index) => {
+                  const isHovered = hoveredRole === exp.id;
+                  // Calculate vertical position based on track - uses CSS variables for responsive spacing
+                  // Small: 45px | Medium: 52px | Tablet: 60px | Desktop: 70px
+
+                  return (
+                    <div
+                      key={exp.id}
+                      className="timeline-bar absolute -translate-y-1/2 cursor-pointer z-10"
+                      style={{
+                        left: `${exp.startPosition}%`,
+                        width: `${exp.width}%`,
+                        top: exp.track === 0 ? '50%' : `calc(50% + calc(var(--track-offset) * ${exp.track}))`,
+                      }}
+                      onMouseEnter={() => setHoveredRole(exp.id)}
+                      onMouseLeave={() => setHoveredRole(null)}
                     >
-                      {/* Description - expands above/below */}
-                      <motion.div
-                        className={`px-2 md:px-4 ${
-                          exp.track === -1 ? 'order-first' : 'order-last'
-                        }`}
-                        initial={false}
-                        animate={{ 
-                          height: isHovered ? 'auto' : 0,
-                          opacity: isHovered ? 1 : 0,
-                          paddingTop: isHovered ? '8px' : 0,
-                          paddingBottom: isHovered ? '4px' : 0,
-                        }}
-                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                      >
-                        <p className="text-[9px] md:text-[11px] text-[#1b3c53] leading-snug">
-                          {exp.description}
-                        </p>
-                      </motion.div>
+                      {/* Connecting Line to Timeline */}
+                      {exp.track !== 0 && (
+                        <div
+                          className="absolute left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-white/15 to-white/5"
+                          style={{
+                            height: 'var(--line-height)',
+                            top: exp.track === -1 ? '100%' : 'auto',
+                            bottom: exp.track === 1 ? '100%' : 'auto'
+                          }}
+                        />
+                      )}
 
-                      {/* Main Bar Content - always visible */}
-                      <div className="h-14 md:h-16 lg:h-18 px-2 md:px-4 py-2 md:py-3 flex flex-col justify-center overflow-hidden">
-                        {/* Continuous scrolling company name - carousel style */}
-                        <div 
-                          ref={(el) => { containerRefs.current[`company-${exp.id}`] = el }}
-                          className="relative overflow-hidden mb-0.5"
+                      {/* Morphing Bar Container */}
+                      <motion.div
+                        className={`relative bg-[#d2c1b6] border-2 border-[#152a38] shadow-lg overflow-hidden transition-all duration-200 ${isHovered ? 'brightness-110 shadow-2xl' : ''}`}
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {/* Description - expands above/below */}
+                        <motion.div
+                          className={`px-2 md:px-4 ${exp.track === -1 ? 'order-first' : 'order-last'
+                            }`}
+                          initial={false}
+                          animate={{
+                            height: isHovered ? 'auto' : 0,
+                            opacity: isHovered ? 1 : 0,
+                            paddingTop: isHovered ? '8px' : 0,
+                            paddingBottom: isHovered ? '4px' : 0,
+                          }}
+                          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
                         >
-                          {isHovered && overflowState[`company-${exp.id}`] ? (
-                            // Duplicate text for seamless loop with spacing
-                            <motion.div
-                              className="flex"
-                              animate={{
-                                x: [0, -1000],
-                              }}
-                              transition={{
-                                duration: 15,
-                                repeat: Infinity,
-                                ease: "linear",
-                                repeatType: "loop",
-                              }}
-                            >
+                          <p className="text-[9px] md:text-[11px] text-[#1b3c53] leading-snug">
+                            {exp.description}
+                          </p>
+                        </motion.div>
+
+                        {/* Main Bar Content - always visible */}
+                        <div className="h-14 md:h-16 lg:h-18 px-2 md:px-4 py-2 md:py-3 flex flex-col justify-center overflow-hidden">
+                          {/* Continuous scrolling company name - carousel style */}
+                          <div
+                            ref={(el) => { containerRefs.current[`company-${exp.id}`] = el }}
+                            className="relative overflow-hidden mb-0.5"
+                          >
+                            {isHovered && overflowState[`company-${exp.id}`] ? (
+                              // Duplicate text for seamless loop with spacing
+                              <motion.div
+                                className="flex"
+                                animate={{
+                                  x: [0, -1000],
+                                }}
+                                transition={{
+                                  duration: 15,
+                                  repeat: Infinity,
+                                  ease: "linear",
+                                  repeatType: "loop",
+                                }}
+                              >
+                                <p
+                                  ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
+                                  className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12"
+                                >
+                                  {exp.company}
+                                </p>
+                                <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
+                                  {exp.company}
+                                </p>
+                                <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
+                                  {exp.company}
+                                </p>
+                                <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
+                                  {exp.company}
+                                </p>
+                              </motion.div>
+                            ) : (
                               <p
                                 ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
-                                className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12"
+                                className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap"
                               >
                                 {exp.company}
                               </p>
-                              <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
-                                {exp.company}
-                              </p>
-                              <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
-                                {exp.company}
-                              </p>
-                              <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
-                                {exp.company}
-                              </p>
-                            </motion.div>
-                          ) : (
-                            <p
-                              ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
-                              className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap"
-                            >
-                              {exp.company}
-                            </p>
-                          )}
-                        </div>
-                        {/* Continuous scrolling title - carousel style */}
-                        <div 
-                          ref={(el) => { containerRefs.current[`title-${exp.id}`] = el }}
-                          className="relative overflow-hidden"
-                        >
-                          {isHovered && overflowState[`title-${exp.id}`] ? (
-                            // Duplicate text for seamless loop with spacing
-                            <motion.div
-                              className="flex"
-                              animate={{
-                                x: [0, -1000],
-                              }}
-                              transition={{
-                                duration: 15,
-                                repeat: Infinity,
-                                ease: "linear",
-                                repeatType: "loop",
-                              }}
-                            >
+                            )}
+                          </div>
+                          {/* Continuous scrolling title - carousel style */}
+                          <div
+                            ref={(el) => { containerRefs.current[`title-${exp.id}`] = el }}
+                            className="relative overflow-hidden"
+                          >
+                            {isHovered && overflowState[`title-${exp.id}`] ? (
+                              // Duplicate text for seamless loop with spacing
+                              <motion.div
+                                className="flex"
+                                animate={{
+                                  x: [0, -1000],
+                                }}
+                                transition={{
+                                  duration: 15,
+                                  repeat: Infinity,
+                                  ease: "linear",
+                                  repeatType: "loop",
+                                }}
+                              >
+                                <p
+                                  ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
+                                  className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12"
+                                >
+                                  {exp.title}
+                                </p>
+                                <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
+                                  {exp.title}
+                                </p>
+                                <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
+                                  {exp.title}
+                                </p>
+                                <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
+                                  {exp.title}
+                                </p>
+                              </motion.div>
+                            ) : (
                               <p
                                 ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
-                                className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12"
+                                className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap"
                               >
                                 {exp.title}
                               </p>
-                              <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
-                                {exp.title}
-                              </p>
-                              <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
-                                {exp.title}
-                              </p>
-                              <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
-                                {exp.title}
-                              </p>
-                            </motion.div>
-                          ) : (
-                            <p
-                              ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
-                              className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap"
-                            >
-                              {exp.title}
-                            </p>
-                          )}
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
+                      </motion.div>
 
-                    {/* Date Labels */}
-                    <div 
-                      className="absolute left-0 text-[8px] md:text-[10px] lg:text-[11px] text-white/40 whitespace-nowrap font-mono"
-                      style={{
-                        top: exp.track === -1 ? '-18px' : 'auto',
-                        bottom: exp.track === -1 ? 'auto' : '-18px'
-                      }}
-                    >
-                      {exp.startDate}
+                      {/* Date Labels */}
+                      <div
+                        className="absolute left-0 text-[8px] md:text-[10px] lg:text-[11px] text-white/40 whitespace-nowrap font-mono"
+                        style={{
+                          top: exp.track === -1 ? '-18px' : 'auto',
+                          bottom: exp.track === -1 ? 'auto' : '-18px'
+                        }}
+                      >
+                        {exp.startDate}
+                      </div>
+                      <div
+                        className="absolute right-0 text-[8px] md:text-[9px] lg:text-[10px] text-white/50 whitespace-nowrap"
+                        style={{
+                          top: exp.track === -1 ? '-18px' : 'auto',
+                          bottom: exp.track === -1 ? 'auto' : '-18px'
+                        }}
+                      >
+                        {exp.endDate}
+                      </div>
                     </div>
-                    <div 
-                      className="absolute right-0 text-[8px] md:text-[9px] lg:text-[10px] text-white/50 whitespace-nowrap"
-                      style={{
-                        top: exp.track === -1 ? '-18px' : 'auto',
-                        bottom: exp.track === -1 ? 'auto' : '-18px'
-                      }}
-                    >
-                      {exp.endDate}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20"></div>
       </section>
@@ -550,12 +581,11 @@ export default function Portfolio() {
             {projects.map((project, i) => {
               const visibleTags = project.technologies.slice(0, project.maxTags)
               const remainingCount = project.technologies.length - project.maxTags
-              
-              return (
-                <motion.div 
-                  key={i} 
-                  className="bg-[#d2c1b6] text-black p-2 md:p-3 flex flex-col justify-between shadow-2xl border-2 border-[#152a38] cursor-pointer"
-                  whileHover={{ 
+
+              const CardContent = (
+                <motion.div
+                  className="bg-[#d2c1b6] text-black p-2 md:p-3 flex flex-col justify-between shadow-2xl border-2 border-[#152a38] cursor-pointer h-full"
+                  whileHover={{
                     scale: 1.02,
                     boxShadow: '0 25px 50px -12px rgba(210, 193, 182, 0.25)'
                   }}
@@ -565,11 +595,11 @@ export default function Portfolio() {
                     <div className="flex items-center justify-between mb-1 md:mb-2">
                       <h3 className="text-base md:text-lg font-bold">{project.title}</h3>
                       {project.github !== "#" && (
-                        <Link href={project.github} target="_blank" className="text-[#1b3c53] hover:opacity-70 transition-opacity">
+                        <div className="text-[#1b3c53]">
                           <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                           </svg>
-                        </Link>
+                        </div>
                       )}
                     </div>
                     <div className="w-full bg-white/30 mb-1 md:mb-2 overflow-hidden relative" style={{ aspectRatio: '1.618 / 1' }}>
@@ -594,6 +624,16 @@ export default function Portfolio() {
                   </div>
                 </motion.div>
               )
+
+              return project.github !== "#" ? (
+                <Link href={project.github} target="_blank" key={i} className="block h-full">
+                  {CardContent}
+                </Link>
+              ) : (
+                <div key={i} className="block h-full">
+                  {CardContent}
+                </div>
+              )
             })}
           </div>
         </div>
@@ -609,10 +649,21 @@ export default function Portfolio() {
             that's it!
           </h2>
           <p className="text-xs md:text-sm mb-12 md:mb-20">wanna chat further? you can find my contact in the top right!</p>
-          <Link href="#about" className="text-xs md:text-sm hover:opacity-70 transition-opacity inline-block">
-            <div className="mb-2">^</div>
-            <div>back to top!</div>
-          </Link>
+          <div
+            className="inline-block cursor-pointer"
+            onClick={() => {
+              document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            <motion.div
+              className="text-xs md:text-sm hover:opacity-70 transition-opacity flex flex-col items-center"
+              whileHover={{ y: -5 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <div className="mb-2">^</div>
+              <div>back to top!</div>
+            </motion.div>
+          </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20"></div>
       </section>
