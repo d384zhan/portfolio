@@ -11,13 +11,13 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: "Dawang Zhang",
-  description: "Dawang Zhang's personal website showcasing experience, projects, and skills.",
+  description: "dawang's personal website!",
   keywords: ["Dawang Zhang", "Portfolio", "Software Engineer", "Management Engineering", "Waterloo", "Developer"],
   authors: [{ name: "Dawang Zhang" }],
   creator: "Dawang Zhang",
   openGraph: {
     title: "Dawang Zhang | Portfolio",
-    description: "Dawang Zhang's personal website showcasing experience, projects, and skills.",
+    description: "dawang's personal website!",
     url: "https://dawangzhang.com", // Replace with actual domain if known, or remove if dynamic
     siteName: "Dawang Zhang Portfolio",
     images: [
@@ -34,17 +34,13 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Dawang Zhang | Portfolio",
-    description: "Dawang Zhang's personal website showcasing experience, projects, and skills.",
+    description: "dawang's personal website!",
     images: ["/me.PNG"],
   },
   icons: {
-    icon: [
-      { url: "/Garfield1978.png" },
-      { url: "/Garfield1978.png", sizes: "32x32", type: "image/png" },
-      { url: "/Garfield1978.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: "/Garfield1978.png",
-    shortcut: "/Garfield1978.png",
+    icon: "/icon.png",
+    apple: "/icon.png",
+    shortcut: "/icon.png",
   },
 };
 
