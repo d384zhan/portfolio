@@ -7,113 +7,84 @@ import { useState, useRef, useEffect } from "react"
 
 export default function Portfolio() {
   const [hoveredRole, setHoveredRole] = useState<number | null>(null)
-  const [overflowState, setOverflowState] = useState<{ [key: string]: boolean }>({})
   const [showDawangTooltip, setShowDawangTooltip] = useState(false)
-  const textRefs = useRef<{ [key: string]: HTMLParagraphElement | null }>({})
-  const containerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
-  // Check for text overflow after render and on resize
-  useEffect(() => {
-    const checkOverflow = () => {
-      const newOverflowState: { [key: string]: boolean } = {}
-      Object.keys(textRefs.current).forEach((key) => {
-        const el = textRefs.current[key]
-        const container = containerRefs.current[key]
-        if (el && container) {
-          // Check if text content is wider than the container
-          const isOverflowing = el.scrollWidth > container.clientWidth
-          newOverflowState[key] = isOverflowing
-        }
-      })
-      setOverflowState(newOverflowState)
-    }
-
-    // Check multiple times to ensure DOM is fully ready
-    checkOverflow()
-    const timer1 = setTimeout(checkOverflow, 50)
-    const timer2 = setTimeout(checkOverflow, 200)
-
-    // Recheck on window resize
-    window.addEventListener('resize', checkOverflow)
-    return () => {
-      window.removeEventListener('resize', checkOverflow)
-      clearTimeout(timer1)
-      clearTimeout(timer2)
-    }
-  }, [hoveredRole]) // Re-check when hover state changes
-
-  // Timeline data - NO GAPS, scaled to fill 100% by treating gaps as 0 width
-  // Visual flow: Sunnybrook → Midnight+Wat.ai overlap → GH Ops (ends with Wat.ai) → GH Data
-  // 
-  // Timeline segments (no gaps):
-  // 1. Sunnybrook: 5 months
-  // 2. Midnight Sun: Jan-Apr 2025 (4mo), Wat.ai: Feb-Aug 2025 (7mo)
-  //    - Midnight starts Jan, Wat.ai starts Feb (1mo later), both roles continue
-  //    - Visual span needed: Jan to Aug = 8 months of calendar time
-  // 3. GH Data: 2 months
-  //
-  // Total visual width: 5 + 8 + 2 = 15 month-equivalents
-  // Scale factor: 100 / 15 = 6.67% per month-equivalent
   const experiences = [
     {
-      id: 1,
-      title: "Data Intern",
-      company: "Sunnybrook Health Science Centre",
-      startDate: "Feb 2023",
-      endDate: "June 2023",
-      duration: 5,
-      startPosition: 0,
-      width: 33.33, // (5/15) × 100 = 33.33%
-      track: 0,
-      description: "data analysis, visualization, and financial reporting under finance and ops"
-    },
-    {
-      id: 2,
-      title: "Software Developer",
-      company: "Midnight Sun Solar Rayce Car Team",
-      startDate: "Jan 2025",
-      endDate: "Apr 2025",
-      duration: 4,
-      startPosition: 33.33, // Right after Sunnybrook
-      width: 26.67, // (4/15) × 100 = 26.67%
-      track: -1,
-      description: "backend telemetry and signal decoding for solar car dashboards"
-    },
-    {
-      id: 3,
-      title: "Product/Software Engineer",
-      company: "Wat.ai",
-      startDate: "Feb 2025",
-      endDate: "Aug 2025",
-      duration: 7,
-      startPosition: 40, // Starts 1 month after Midnight: 33.33 + (1/15)×100 = 40%
-      width: 46.67, // (7/15) × 100 = 46.67%, ends at 86.67%
-      track: 1,
-      description: "orecast team, eda, product design, and benchmarking for machine learning in oil drilling applications"
-    },
-    {
-      id: 4,
-      title: "Operations Analyst",
-      company: "Greenhouse Juice Company",
-      startDate: "May 2025",
-      endDate: "Aug 2025",
-      duration: 4,
-      startPosition: 60, // Starts when Midnight ends: 33.33 + 26.67 = 60%
-      width: 26.67, // (4/15) × 100 = 26.67%, ends at 86.67% (same as Wat.ai!)
-      track: -1,
-      description: "procurement, workflow automation, building internal apps & data engineering"
+      id: 6,
+      company: "Blair AI",
+      roles: [
+        {
+          id: "6-1",
+          title: "Software Engineer",
+          startDate: "Incoming Jan 2026",
+          endDate: "",
+          description: "building healthcare AI voice agents",
+        }
+      ]
     },
     {
       id: 5,
-      title: "Data/Software Engineer",
       company: "Greenhouse Juice Company",
-      startDate: "Sep 2025",
-      endDate: "Present",
-      duration: 2,
-      startPosition: 86.67, // Starts when Wat.ai and GH Ops end
-      width: 13.33, // (2/15) × 100 = 13.33%, fills to 100%
-      track: 0,
-      description: "dashboard maintenance, third-party data migrations, internal app development"
+      sticker: "/ginger.png",
+      stickerPosition: "top-right",
+      roles: [
+        {
+          id: "5-1",
+          title: "Data/Software Engineer",
+          startDate: "Sep 2025",
+          endDate: "Dec 2025",
+          description: "dashboard maintenance, third-party data migrations, internal app development",
+        },
+        {
+          id: "5-2",
+          title: "Operations Analyst",
+          startDate: "May 2025",
+          endDate: "Aug 2025",
+          description: "procurement, workflow automation, building internal apps & data engineering"
+        }
+      ]
+    },
+    {
+      id: 3,
+      company: "Wat.ai",
+      roles: [
+        {
+          id: "3-1",
+          title: "Product/Software Engineer",
+          startDate: "Feb 2025",
+          endDate: "Aug 2025",
+          description: "forecast team, eda, product design, and benchmarking for machine learning in oil drilling applications"
+        }
+      ]
+    },
+    {
+      id: 2,
+      company: "Midnight Sun Solar Rayce Car Team",
+      roles: [
+        {
+          id: "2-1",
+          title: "Software Developer",
+          startDate: "Jan 2025",
+          endDate: "Apr 2025",
+          description: "backend telemetry and signal decoding for solar car dashboards"
+        }
+      ]
+    },
+    {
+      id: 1,
+      company: "Sunnybrook Health Science Centre",
+      sticker: "/prosthetic.png",
+      stickerPosition: "bottom-left",
+      roles: [
+        {
+          id: "1-1",
+          title: "Data Intern",
+          startDate: "Feb 2023",
+          endDate: "June 2023",
+          description: "data analysis, visualization, and financial reporting under finance and ops",
+        }
+      ]
     },
   ]
 
@@ -175,11 +146,8 @@ export default function Portfolio() {
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
-          backgroundImage: `
-            repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 8px),
-            repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 8px)
-          `,
-          backgroundSize: '8px 8px'
+          backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px)`,
+          backgroundSize: '12px 12px'
         }}
       ></div>
 
@@ -323,250 +291,113 @@ export default function Portfolio() {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="h-screen snap-start snap-always relative overflow-hidden flex flex-col">
-        {/* Title and subtitle aligned with projects section */}
-        <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 w-full pt-16 md:pt-20 lg:pt-28">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl italic mb-1 md:mb-2 lg:mb-3">experience</h2>
-          <p className="text-[10px] md:text-xs lg:text-sm text-white/70">hover over a bar to see details!</p>
-        </div>
+      <section id="experience" className="min-h-screen snap-start snap-always relative overflow-hidden flex flex-col justify-center py-20">
+        <div className="max-w-4xl mx-auto px-6 md:px-12 w-full relative">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl italic mb-8 md:mb-12">experience</h2>
 
-        {/* Timeline centered vertically in remaining space */}
-        <div className="flex-1 flex items-center justify-center overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 md:px-12 lg:px-24 w-full">
-            {/* Bar-Based Timeline */}
-            <div className="relative w-full h-[280px] sm:h-[320px] md:h-[420px] lg:h-[500px] px-2 md:px-8 lg:px-16">
-              {/* Sticker Images - Larger and positioned near respective companies */}
-              {/* Prosthetic near Sunnybrook - moved 128px further left - Hidden on mobile */}
-              <motion.div
-                className="hidden lg:block absolute w-32 h-32 pointer-events-none z-20"
-                style={{
-                  left: 'calc(5% - 128px)',
-                  top: '35%',
-                  rotate: -15
-                }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Image
-                  src="/prosthetic.png"
-                  alt="Prosthetic sticker"
-                  width={128}
-                  height={128}
-                  className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(210,193,182,0.4)]"
-                  style={{
-                    filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.8)) drop-shadow(0 0 1px rgba(255,255,255,0.9))',
-                  }}
-                />
-              </motion.div>
+          <div className="flex flex-col gap-4">
+            {experiences.map((exp) => {
+              const isHovered = hoveredRole === exp.id; // Keep using ID for hover state of the entire card
 
-              {/* Ginger near Greenhouse sections - moved 128px further right - Hidden on mobile */}
-              <motion.div
-                className="hidden lg:block absolute w-36 h-36 pointer-events-none z-20"
-                style={{
-                  right: 'calc(10% - 128px)',
-                  top: '55%',
-                  rotate: 12
-                }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <Image
-                  src="/ginger.png"
-                  alt="Ginger sticker"
-                  width={144}
-                  height={144}
-                  className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(210,193,182,0.4)]"
-                  style={{
-                    filter: 'drop-shadow(0 0 0 rgba(255,255,255,0.8)) drop-shadow(0 0 1px rgba(255,255,255,0.9))',
-                  }}
-                />
-              </motion.div>
-
-              {/* Timeline Labels */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
-                Feb 2023
-              </div>
-              <div className="absolute top-1/2 -translate-y-1/2 right-2 md:right-8 lg:right-16 text-[9px] md:text-xs text-[#d2c1b6]/50">
-                Present
-              </div>
-
-              {/* Main Timeline Line */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-0.5 bg-gradient-to-r from-white/20 via-[#d2c1b6]/40 to-white/20 shadow-sm"></div>
-
-              {/* Timeline Bars */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-2 md:left-8 lg:left-16 right-2 md:right-8 lg:right-16 h-36 sm:h-44 md:h-52 lg:h-56">
-                {experiences.map((exp, index) => {
-                  const isHovered = hoveredRole === exp.id;
-                  // Calculate vertical position based on track - uses CSS variables for responsive spacing
-                  // Small: 45px | Medium: 52px | Tablet: 60px | Desktop: 70px
-
-                  return (
-                    <div
-                      key={exp.id}
-                      className="timeline-bar absolute -translate-y-1/2 cursor-pointer z-10"
+              return (
+                <motion.div
+                  key={exp.id}
+                  className="relative w-full"
+                  onMouseEnter={() => setHoveredRole(exp.id)}
+                  onMouseLeave={() => setHoveredRole(null)}
+                  initial={false}
+                >
+                  {/* Sticker Images - Positioned relative to the experience bar */}
+                  {exp.sticker && (
+                    <motion.div
+                      className="absolute z-20 pointer-events-none hidden md:block"
                       style={{
-                        left: `${exp.startPosition}%`,
-                        width: `${exp.width}%`,
-                        top: exp.track === 0 ? '50%' : `calc(50% + calc(var(--track-offset) * ${exp.track}))`,
+                        ...(exp.stickerPosition === 'top-right' ? {
+                          right: '-88px',
+                          top: '-50px',
+                          rotate: 15
+                        } : {
+                          left: '-76px',
+                          bottom: '-40px',
+                          rotate: -10
+                        })
                       }}
-                      onMouseEnter={() => setHoveredRole(exp.id)}
-                      onMouseLeave={() => setHoveredRole(null)}
+                      animate={{
+                        rotate: isHovered ? (exp.stickerPosition === 'top-right' ? 25 : -20) : (exp.stickerPosition === 'top-right' ? 15 : -10),
+                        scale: isHovered ? 1.1 : 1
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
-                      {/* Connecting Line to Timeline */}
-                      {exp.track !== 0 && (
-                        <div
-                          className="absolute left-1/2 -translate-x-1/2 w-px bg-gradient-to-b from-white/15 to-white/5"
-                          style={{
-                            height: 'var(--line-height)',
-                            top: exp.track === -1 ? '100%' : 'auto',
-                            bottom: exp.track === 1 ? '100%' : 'auto'
-                          }}
-                        />
-                      )}
+                      <Image
+                        src={exp.sticker}
+                        alt="Sticker"
+                        width={140}
+                        height={140}
+                        className="w-28 h-28 md:w-40 md:h-40 object-contain drop-shadow-xl"
+                      />
+                    </motion.div>
+                  )}
 
-                      {/* Morphing Bar Container */}
-                      <motion.div
-                        className={`relative bg-[#d2c1b6] border-2 border-[#152a38] shadow-lg overflow-hidden transition-all duration-200 ${isHovered ? 'brightness-110 shadow-2xl' : ''}`}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {/* Description - expands above/below */}
-                        <motion.div
-                          className={`px-2 md:px-4 ${exp.track === -1 ? 'order-first' : 'order-last'
-                            }`}
-                          initial={false}
-                          animate={{
-                            height: isHovered ? 'auto' : 0,
-                            opacity: isHovered ? 1 : 0,
-                            paddingTop: isHovered ? '8px' : 0,
-                            paddingBottom: isHovered ? '4px' : 0,
-                          }}
-                          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                        >
-                          <p className="text-[9px] md:text-[11px] text-[#1b3c53] leading-snug">
-                            {exp.description}
-                          </p>
-                        </motion.div>
+                  <motion.div
+                    className={`
+                      relative w-full bg-[#d2c1b6] border-2 border-[#152a38] shadow-[4px_4px_0px_0px_rgba(21,42,56,1)]
+                      overflow-hidden transition-colors duration-200
+                      ${isHovered ? 'brightness-105' : ''}
+                    `}
+                    layout
+                  >
+                    <div className="px-3 py-2 md:px-5 md:py-3 flex flex-col gap-3">
+                      {/* Company Header */}
+                      <h3 className="text-sm md:text-base font-bold text-[#152a38] uppercase tracking-tight">
+                        {exp.company}
+                      </h3>
 
-                        {/* Main Bar Content - always visible */}
-                        <div className="h-14 md:h-16 lg:h-18 px-2 md:px-4 py-2 md:py-3 flex flex-col justify-center overflow-hidden">
-                          {/* Continuous scrolling company name - carousel style */}
-                          <div
-                            ref={(el) => { containerRefs.current[`company-${exp.id}`] = el }}
-                            className="relative overflow-hidden mb-0.5"
-                          >
-                            {isHovered && overflowState[`company-${exp.id}`] ? (
-                              // Duplicate text for seamless loop with spacing
-                              <motion.div
-                                className="flex"
-                                animate={{
-                                  x: [0, -1000],
-                                }}
-                                transition={{
-                                  duration: 15,
-                                  repeat: Infinity,
-                                  ease: "linear",
-                                  repeatType: "loop",
-                                }}
-                              >
-                                <p
-                                  ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
-                                  className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12"
-                                >
-                                  {exp.company}
-                                </p>
-                                <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
-                                  {exp.company}
-                                </p>
-                                <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
-                                  {exp.company}
-                                </p>
-                                <p className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap pr-12">
-                                  {exp.company}
-                                </p>
-                              </motion.div>
-                            ) : (
-                              <p
-                                ref={(el) => { textRefs.current[`company-${exp.id}`] = el }}
-                                className="text-xs md:text-sm font-bold text-[#152a38] leading-tight whitespace-nowrap"
-                              >
-                                {exp.company}
-                              </p>
+                      {/* Roles */}
+                      <div className="relative flex flex-col gap-3">
+                        {/* Connecting Line for multiple roles */}
+                        {exp.roles.length > 1 && (
+                          <div className="absolute left-[7px] top-2 bottom-2 w-0.5 bg-[#152a38]/20"></div>
+                        )}
+
+                        {exp.roles.map((role, index) => (
+                          <div key={role.id} className={`relative flex flex-col ${exp.roles.length > 1 ? 'pl-6' : ''}`}>
+                            {/* Dot for timeline */}
+                            {exp.roles.length > 1 && (
+                              <div className="absolute left-[4px] top-1.5 w-2 h-2 rounded-full bg-[#152a38] ring-2 ring-[#d2c1b6]"></div>
                             )}
-                          </div>
-                          {/* Continuous scrolling title - carousel style */}
-                          <div
-                            ref={(el) => { containerRefs.current[`title-${exp.id}`] = el }}
-                            className="relative overflow-hidden"
-                          >
-                            {isHovered && overflowState[`title-${exp.id}`] ? (
-                              // Duplicate text for seamless loop with spacing
-                              <motion.div
-                                className="flex"
-                                animate={{
-                                  x: [0, -1000],
-                                }}
-                                transition={{
-                                  duration: 15,
-                                  repeat: Infinity,
-                                  ease: "linear",
-                                  repeatType: "loop",
-                                }}
-                              >
-                                <p
-                                  ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
-                                  className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12"
-                                >
-                                  {exp.title}
-                                </p>
-                                <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
-                                  {exp.title}
-                                </p>
-                                <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
-                                  {exp.title}
-                                </p>
-                                <p className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap pr-12">
-                                  {exp.title}
-                                </p>
-                              </motion.div>
-                            ) : (
-                              <p
-                                ref={(el) => { textRefs.current[`title-${exp.id}`] = el }}
-                                className="text-[10px] md:text-xs text-[#152a38]/70 whitespace-nowrap"
-                              >
-                                {exp.title}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
 
-                      {/* Date Labels */}
-                      <div
-                        className="absolute left-0 text-[8px] md:text-[10px] lg:text-[11px] text-white/40 whitespace-nowrap font-mono"
-                        style={{
-                          top: exp.track === -1 ? '-18px' : 'auto',
-                          bottom: exp.track === -1 ? 'auto' : '-18px'
-                        }}
-                      >
-                        {exp.startDate}
-                      </div>
-                      <div
-                        className="absolute right-0 text-[8px] md:text-[9px] lg:text-[10px] text-white/50 whitespace-nowrap"
-                        style={{
-                          top: exp.track === -1 ? '-18px' : 'auto',
-                          bottom: exp.track === -1 ? 'auto' : '-18px'
-                        }}
-                      >
-                        {exp.endDate}
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-1 md:gap-4">
+                              <p className="text-xs md:text-sm text-[#152a38]/80 font-medium">
+                                {role.title}
+                              </p>
+                              <div className="text-xs md:text-sm font-mono text-[#152a38]/60 whitespace-nowrap">
+                                {role.endDate ? `${role.startDate} — ${role.endDate}` : role.startDate}
+                              </div>
+                            </div>
+
+                            {/* Expandable Description */}
+                            <motion.div
+                              initial={false}
+                              animate={{
+                                height: isHovered ? 'auto' : 0,
+                                opacity: isHovered ? 1 : 0,
+                                marginTop: isHovered ? '4px' : 0
+                              }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                              className="overflow-hidden"
+                            >
+                              <p className="text-xs md:text-sm text-[#152a38] leading-relaxed border-t border-[#152a38]/10 pt-1 mt-1">
+                                {role.description}
+                              </p>
+                            </motion.div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20"></div>

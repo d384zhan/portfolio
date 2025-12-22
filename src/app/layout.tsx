@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Dawang Zhang | Portfolio",
     description: "dawang zhang's personal website.",
-    url: "https://dawangzhang.com", // Replace with actual domain if known, or remove if dynamic
+    url: "https://www.dawang.tech", // Replace with actual domain if known, or remove if dynamic
     siteName: "Dawang Zhang Portfolio",
     images: [
       {
