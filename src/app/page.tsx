@@ -202,7 +202,7 @@ export default function Portfolio() {
             github
           </Link>
           <span>/</span>
-          <Link href="mailto:d384zhan@uwaterloo.ca" className="hover:underline hover:text-[#d2c1b6] transition-all">
+          <Link href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#100;&#51;&#56;&#52;&#122;&#104;&#97;&#110;&#64;&#117;&#119;&#97;&#116;&#101;&#114;&#108;&#111;&#111;&#46;&#99;&#97;" className="hover:underline hover:text-[#d2c1b6] transition-all">
             email
           </Link>
         </div>
@@ -212,13 +212,15 @@ export default function Portfolio() {
       <section id="about" className="h-screen snap-start snap-always flex items-center justify-center relative">
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 w-full">
           <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center justify-center">
-            <div className="w-full md:w-1/2 flex justify-center">
+            <div className="w-full md:w-1/2 flex justify-center relative">
+              {/* Stacked photo effect */}
+              <div className="absolute inset-0 bg-[#d2c1b6] rotate-2 border-2 border-[#152a38] transform scale-95 translate-y-2 translate-x-2"></div>
               <Image
                 src="/me.PNG"
                 alt="Profile photo"
                 width={600}
                 height={700}
-                className="w-full max-w-sm md:max-w-lg h-auto shadow-2xl"
+                className="relative z-10 w-full max-w-sm md:max-w-lg h-auto shadow-2xl border-4 border-white -rotate-2"
               />
             </div>
             <div className="w-full md:w-1/2 space-y-4 md:space-y-6">
@@ -229,8 +231,10 @@ export default function Portfolio() {
                   onMouseLeave={() => setShowDawangTooltip(false)}
                 >
                   Dawang
-                  {/* Red underline - changed from squiggly to straight line to match design language */}
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#ef4444]"></div>
+                  {/* Squiggly underline */}
+                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-[#ef4444]" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <path d="M0 5 Q 5 0 10 5 T 20 5 T 30 5 T 40 5 T 50 5 T 60 5 T 70 5 T 80 5 T 90 5 T 100 5" fill="none" stroke="currentColor" strokeWidth="4" />
+                  </svg>
                   {/* Tooltip */}
                   {showDawangTooltip && (
                     <motion.div
@@ -305,6 +309,7 @@ export default function Portfolio() {
                   className="relative w-full"
                   onMouseEnter={() => setHoveredRole(exp.id)}
                   onMouseLeave={() => setHoveredRole(null)}
+                  onClick={() => setHoveredRole(hoveredRole === exp.id ? null : exp.id)}
                   initial={false}
                 >
                   {/* Sticker Images - Positioned relative to the experience bar */}
@@ -340,7 +345,7 @@ export default function Portfolio() {
 
                   <motion.div
                     className={`
-                      relative w-full bg-[#d2c1b6] border-2 border-[#152a38] shadow-[4px_4px_0px_0px_rgba(21,42,56,1)]
+                      relative w-full bg-[#d2c1b6] border-2 border-[#152a38]
                       overflow-hidden transition-colors duration-200
                       ${isHovered ? 'brightness-105' : ''}
                     `}
@@ -348,7 +353,7 @@ export default function Portfolio() {
                   >
                     <div className="px-3 py-2 md:px-5 md:py-3 flex flex-col gap-3">
                       {/* Company Header */}
-                      <h3 className="text-sm md:text-base font-bold text-[#152a38] uppercase tracking-tight">
+                      <h3 className="text-sm md:text-base font-bold text-[#152a38] lowercase tracking-tight">
                         {exp.company}
                       </h3>
 
@@ -367,7 +372,7 @@ export default function Portfolio() {
                             )}
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-1 md:gap-4">
-                              <p className="text-xs md:text-sm text-[#152a38]/80 font-medium">
+                              <p className="text-xs md:text-sm text-[#152a38]/80 font-medium lowercase">
                                 {role.title}
                               </p>
                               <div className="text-xs md:text-sm font-mono text-[#152a38]/60 whitespace-nowrap">
@@ -405,14 +410,11 @@ export default function Portfolio() {
 
       {/* Projects Section */}
       <section id="projects" className="min-h-screen md:h-screen snap-start snap-always flex flex-col justify-center relative py-8 md:py-12 lg:py-20 overflow-y-auto md:overflow-visible">
-        <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20 w-full">
+        <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-20 w-full">
           <h2 className="text-2xl md:text-3xl lg:text-4xl italic text-right mb-3 md:mb-4 lg:mb-6">projects</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
             {projects.map((project, i) => {
-              const visibleTags = project.technologies.slice(0, project.maxTags)
-              const remainingCount = project.technologies.length - project.maxTags
-
               const CardContent = (
                 <motion.div
                   className="bg-[#d2c1b6] text-black p-2 md:p-3 flex flex-col justify-between shadow-2xl border-2 border-[#152a38] cursor-pointer h-full"
@@ -441,16 +443,13 @@ export default function Portfolio() {
                         className="object-cover"
                       />
                     </div>
+                    <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
                     <div className="flex flex-wrap gap-1">
-                      {visibleTags.map((tech, idx) => (
+                      {project.technologies.map((tech, idx) => (
                         <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px]">{tech}</span>
                       ))}
-                      {remainingCount > 0 && (
-                        <span className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px]">+{remainingCount}</span>
-                      )}
                     </div>
                   </div>
                 </motion.div>
