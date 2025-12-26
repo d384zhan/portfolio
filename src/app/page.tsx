@@ -2,12 +2,14 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useState, useRef, useEffect } from "react"
 
 export default function Portfolio() {
   const [hoveredRole, setHoveredRole] = useState<number | null>(null)
   const [showDawangTooltip, setShowDawangTooltip] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<{ row: number, col: number } | null>(null)
+  const [hoveredProject, setHoveredProject] = useState<{ row: number, col: number } | null>(null)
 
   const experiences = [
     {
@@ -95,7 +97,7 @@ export default function Portfolio() {
       description: "ai-powered crypto market sim",
       technologies: ["next.js", "python", "flask", "supabase", "gemini api", "coinbase api"],
       github: "https://github.com/d384zhan/htv-x",
-      maxTags: 4,
+      maxTags: 6,
       image: "/coinpilot.png"
     },
     {
@@ -413,65 +415,181 @@ export default function Portfolio() {
         <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-20 w-full">
           <h2 className="text-2xl md:text-3xl lg:text-4xl italic text-right mb-3 md:mb-4 lg:mb-6">projects</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
-            {projects.map((project, i) => {
-              const CardContent = (
-                <motion.div
-                  className="bg-[#d2c1b6] text-black p-2 md:p-3 flex flex-col justify-between shadow-2xl border-2 border-[#152a38] cursor-pointer h-full"
-                  whileHover={{
-                    scale: 1.02,
-                    boxShadow: '0 25px 50px -12px rgba(210, 193, 182, 0.25)'
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-1 md:mb-2">
-                      <h3 className="text-base md:text-lg font-bold">{project.title}</h3>
-                      {project.github !== "#" && (
-                        <div className="text-[#1b3c53]">
-                          <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-                    <div className="w-full bg-white/30 mb-1 md:mb-2 overflow-hidden relative" style={{ aspectRatio: '1.618 / 1' }}>
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
-                  </div>
-                  <div>
-                    <div className="flex flex-wrap gap-1">
-                      {project.technologies.map((tech, idx) => (
-                        <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px]">{tech}</span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )
+          <div className="flex flex-col gap-2 md:gap-3">
+            {/* Chunk projects into rows of 3 */}
+            {Array.from({ length: Math.ceil(projects.length / 3) }).map((_, rowIndex) => {
+              const rowProjects = projects.slice(rowIndex * 3, (rowIndex + 1) * 3);
+              const isRowSelected = selectedProject?.row === rowIndex;
 
-              return project.github !== "#" ? (
-                <Link href={project.github} target="_blank" key={i} className="block h-full">
-                  {CardContent}
-                </Link>
-              ) : (
-                <div key={i} className="block h-full">
-                  {CardContent}
+              return (
+                <div key={rowIndex} className="flex flex-col md:flex-row gap-2 md:gap-3 w-full h-auto md:h-[18.5rem]">
+                  {rowProjects.map((project, colIndex) => {
+                    const isSelected = selectedProject?.row === rowIndex && selectedProject?.col === colIndex;
+                    const isRowSelected = selectedProject?.row === rowIndex;
+                    const isSiblingSelected = isRowSelected && !isSelected;
+                    const isHovered = hoveredProject?.row === rowIndex && hoveredProject?.col === colIndex;
+
+                    // Calculate flex basis for desktop
+                    // Default: 1 (33%)
+                    // Selected: 8 (80%)
+                    // Sibling Selected: 1 (10%)
+                    // Total when selected: 8 + 1 + 1 = 10 parts. 8/10 = 80%, 1/10 = 10%.
+
+                    const CardContent = (
+                      <motion.div
+                        className={`
+                          bg-[#d2c1b6] text-black p-2 md:p-3 md:pb-3 flex flex-col justify-between 
+                          shadow-2xl border-2 border-[#152a38] cursor-pointer h-full
+                          relative overflow-hidden
+                          ${isSelected ? 'brightness-110 saturate-150' : (isHovered ? 'brightness-105' : '')}
+                          transition-[filter] duration-500
+                          ${isSiblingSelected ? 'bg-[#d2c1b6] flex items-center justify-center p-0' : ''}
+                        `}
+                        layout
+                        initial={{ flex: 1 }}
+                        animate={{
+                          flex: isSelected ? 8 : (isRowSelected ? 1 : 1)
+                        }}
+                        transition={{
+                          type: "tween",
+                          duration: 0.5,
+                          ease: "easeInOut"
+                        }}
+                        onClick={() => setSelectedProject(isSelected ? null : { row: rowIndex, col: colIndex })}
+                        onMouseEnter={() => setHoveredProject({ row: rowIndex, col: colIndex })}
+                        onMouseLeave={() => setHoveredProject(null)}
+                      >
+                        <AnimatePresence>
+                          {isSiblingSelected ? (
+                            <motion.div
+                              key="minimized"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="h-full flex items-center justify-center w-full min-w-0"
+                            >
+                              <span className="whitespace-nowrap font-bold text-lg text-[#152a38] tracking-widest lowercase" style={{ writingMode: 'vertical-rl' }}>
+                                {project.title}
+                              </span>
+                            </motion.div>
+                          ) : isSelected ? (
+                            <motion.div
+                              key="expanded"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="flex h-full w-full min-w-[300px] md:min-w-[600px]"
+                            >
+                              {/* Main Content - Left Side (Fixed Width) */}
+                              <div className="flex-shrink-0 flex flex-col justify-between h-full w-[41.66%] pr-4 border-r border-[#1b3c53]/10">
+                                <div>
+                                  <div className="flex items-center justify-between mb-1 md:mb-2 w-full">
+                                    <motion.h3 layoutId={`title-${rowIndex}-${colIndex}`} className="text-base md:text-lg font-bold truncate">{project.title}</motion.h3>
+                                    {project.github !== "#" && (
+                                      <Link href={project.github} target="_blank" className="text-[#1b3c53] flex-shrink-0 hover:opacity-70 transition-opacity" onClick={(e) => e.stopPropagation()}>
+                                        <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                        </svg>
+                                      </Link>
+                                    )}
+                                  </div>
+                                  <motion.div layoutId={`img-${rowIndex}-${colIndex}`} layout className="w-full bg-white/30 mb-1 md:mb-2 overflow-hidden relative" style={{ aspectRatio: '1.618 / 1' }}>
+                                    <Image
+                                      src={project.image}
+                                      alt={project.title}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  </motion.div>
+                                  <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
+                                </div>
+                                <div>
+                                  <div className="flex flex-wrap gap-1 mt-auto">
+                                    {project.technologies.slice(0, project.maxTags || 3).map((tech, idx) => (
+                                      <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px] whitespace-nowrap">{tech}</span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Description - Right Side */}
+                              <div className="flex flex-col gap-4 flex-grow min-w-[300px] pl-4 h-full overflow-y-auto">
+                                <div>
+                                  <h4 className="text-sm font-bold text-[#152a38] uppercase tracking-wider mb-2">About</h4>
+                                  <p className="text-sm font-medium mb-4">Extended Subtitle Placeholder</p>
+                                </div>
+                                <div>
+                                  <p className="text-sm leading-relaxed text-[#152a38]/80">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum delore.
+                                  </p>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ) : (
+                            <motion.div
+                              key="compact"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="flex h-full w-full"
+                            >
+                              <div className="flex-shrink-0 flex flex-col justify-between h-full w-full">
+                                <div>
+                                  <div className="flex items-center justify-between mb-1 md:mb-2 w-full">
+                                    <motion.h3 layoutId={`title-${rowIndex}-${colIndex}`} className="text-base md:text-lg font-bold truncate">{project.title}</motion.h3>
+                                    {project.github !== "#" && (
+                                      <Link href={project.github} target="_blank" className="text-[#1b3c53] flex-shrink-0 hover:opacity-70 transition-opacity" onClick={(e) => e.stopPropagation()}>
+                                        <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                        </svg>
+                                      </Link>
+                                    )}
+                                  </div>
+                                  <motion.div layoutId={`img-${rowIndex}-${colIndex}`} className="w-full bg-white/30 mb-1 md:mb-2 overflow-hidden relative" style={{ aspectRatio: '1.618 / 1' }}>
+                                    <Image
+                                      src={project.image}
+                                      alt={project.title}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  </motion.div>
+                                  <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
+                                </div>
+                                <div>
+                                  <div className="flex flex-wrap gap-1 mt-auto">
+                                    {project.technologies.slice(0, project.maxTags || 3).map((tech, idx) => (
+                                      <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px] whitespace-nowrap">{tech}</span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )
+                          }
+                        </AnimatePresence>
+
+                      </motion.div>
+                    )
+
+                    return (
+                      <div key={colIndex} className="block h-full flex-grow contents">
+                        {CardContent}
+                      </div>
+                    )
+                  })}
                 </div>
-              )
+              );
             })}
           </div>
-        </div>
+        </div >
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20"></div>
-      </section>
+      </section >
 
       {/* Footer */}
-      <section className="h-screen snap-start snap-always flex flex-col justify-center relative">
+      < section className="h-screen snap-start snap-always flex flex-col justify-center relative" >
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 text-center w-full">
           <h2 className="text-3xl md:text-4xl lg:text-5xl italic mb-6 md:mb-8">
             unfortunately,
@@ -496,7 +614,7 @@ export default function Portfolio() {
           </div>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20"></div>
-      </section>
-    </div>
+      </section >
+    </div >
   )
 }
