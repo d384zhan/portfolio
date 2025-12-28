@@ -95,6 +95,8 @@ export default function Portfolio() {
     {
       title: "coinpilot",
       description: "ai-powered crypto market sim",
+      subtitle: "Hackathon project for Hack the Valley X",
+      extendedDescription: "A cryptocurrency trading simulator powered by AI agents. Users can practice trading strategies in a risk-free environment with real-time market data from Coinbase API and AI-powered market analysis using Google's Gemini API.",
       technologies: ["next.js", "python", "flask", "supabase", "gemini api", "coinbase api"],
       github: "https://github.com/d384zhan/htv-x",
       maxTags: 6,
@@ -103,6 +105,8 @@ export default function Portfolio() {
     {
       title: "familink",
       description: "family connection platform",
+      subtitle: "Bridging generations through technology",
+      extendedDescription: "A platform designed to help families stay connected across distances. Features include shared photo albums, video calls, and AI-powered conversation starters to facilitate meaningful interactions between family members.",
       technologies: ["react.js", "node.js", "firebase", "openai api"],
       github: "https://github.com/d384zhan/familink.ai",
       maxTags: 4,
@@ -111,6 +115,8 @@ export default function Portfolio() {
     {
       title: "financial planner",
       description: "excel financial tracker",
+      subtitle: "Personal finance made simple",
+      extendedDescription: "A comprehensive Excel-based financial planning tool with automated tracking of income, expenses, and savings goals. Features custom UserForms for easy data entry and dynamic charts for visualizing financial progress.",
       technologies: ["vba", "userforms"],
       github: "https://github.com/d384zhan/Financial_Planner",
       maxTags: 2,
@@ -119,6 +125,8 @@ export default function Portfolio() {
     {
       title: "excel calendar",
       description: "interactive calendar system",
+      subtitle: "Time management in Excel",
+      extendedDescription: "An interactive calendar application built entirely in Excel using VBA. Features include event scheduling, reminders, and a clean visual interface for managing daily, weekly, and monthly views.",
       technologies: ["vba", "userforms"],
       github: "https://github.com/d384zhan/TimeManagement_Tool",
       maxTags: 2,
@@ -127,6 +135,8 @@ export default function Portfolio() {
     {
       title: "rnow rewards",
       description: "loyalty program design, 3rd national",
+      subtitle: "3rd Place National Case Competition",
+      extendedDescription: "Designed a comprehensive loyalty rewards program for a national case competition. The solution focused on customer retention strategies, gamification elements, and data-driven personalization to maximize engagement.",
       technologies: ["case competition"],
       github: "#",
       maxTags: 1,
@@ -135,6 +145,8 @@ export default function Portfolio() {
     {
       title: "connect four",
       description: "classic game with OOP design",
+      subtitle: "Object-oriented game development",
+      extendedDescription: "A fully functional Connect Four game built in Java with a graphical interface. Implements clean OOP principles including inheritance, encapsulation, and polymorphism. Features include two-player mode and win detection algorithms.",
       technologies: ["java", "swing", "awt"],
       github: "https://github.com/d384zhan/ConnectFour",
       maxTags: 3,
@@ -535,11 +547,11 @@ export default function Portfolio() {
                             <div className="pl-4 min-w-[250px] md:min-w-[300px] overflow-y-auto h-full">
                               <div>
                                 <h4 className="text-sm font-bold text-[#152a38] uppercase tracking-wider mb-2">About</h4>
-                                <p className="text-sm font-medium mb-4">Extended Subtitle Placeholder</p>
+                                <p className="text-sm font-medium mb-4">{project.subtitle}</p>
                               </div>
                               <div>
                                 <p className="text-sm leading-relaxed text-[#152a38]/80">
-                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum delore.
+                                  {project.extendedDescription}
                                 </p>
                               </div>
                             </div>
