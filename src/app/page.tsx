@@ -95,8 +95,8 @@ export default function Portfolio() {
     {
       title: "coinpilot",
       description: "ai-powered crypto market sim",
-      subtitle: "Hackathon project for Hack the Valley X",
-      extendedDescription: "A cryptocurrency trading simulator powered by AI agents. Users can practice trading strategies in a risk-free environment with real-time market data from Coinbase API and AI-powered market analysis using Google's Gemini API.",
+      subtitle: "built for hack the valley x",
+      extendedDescription: "• wanted to make a lightweight market sim for learning to invest in crypto\n• frontend news ticker style animations were frustrating\n• learned lots about context injection, prompt response regex rendering, parallel data fetching, etc!",
       technologies: ["next.js", "python", "flask", "supabase", "gemini api", "coinbase api"],
       github: "https://github.com/d384zhan/htv-x",
       maxTags: 6,
@@ -105,8 +105,8 @@ export default function Portfolio() {
     {
       title: "familink",
       description: "family connection platform",
-      subtitle: "Bridging generations through technology",
-      extendedDescription: "A platform designed to help families stay connected across distances. Features include shared photo albums, video calls, and AI-powered conversation starters to facilitate meaningful interactions between family members.",
+      subtitle: "built for uofthacks 12",
+      extendedDescription: "• made an app for prompting deeper conversations w/ ai\n• first hackathon (learned not to expose api keys!)\n• awesome exercise in git workflows, fullstack",
       technologies: ["react.js", "node.js", "firebase", "openai api"],
       github: "https://github.com/d384zhan/familink.ai",
       maxTags: 4,
@@ -115,8 +115,8 @@ export default function Portfolio() {
     {
       title: "financial planner",
       description: "excel financial tracker",
-      subtitle: "Personal finance made simple",
-      extendedDescription: "A comprehensive Excel-based financial planning tool with automated tracking of income, expenses, and savings goals. Features custom UserForms for easy data entry and dynamic charts for visualizing financial progress.",
+      subtitle: "mse100 project",
+      extendedDescription: "• excel workbook that allows you to track transactions\n• active goal monitoring and customized feedback\n• vba is too hard",
       technologies: ["vba", "userforms"],
       github: "https://github.com/d384zhan/Financial_Planner",
       maxTags: 2,
@@ -125,8 +125,8 @@ export default function Portfolio() {
     {
       title: "excel calendar",
       description: "interactive calendar system",
-      subtitle: "Time management in Excel",
-      extendedDescription: "An interactive calendar application built entirely in Excel using VBA. Features include event scheduling, reminders, and a clean visual interface for managing daily, weekly, and monthly views.",
+      subtitle: "mse100 project",
+      extendedDescription: "• excel workbook decision support system (dss)\n• acts as a calendar to help schedule tasks and determine priorities",
       technologies: ["vba", "userforms"],
       github: "https://github.com/d384zhan/TimeManagement_Tool",
       maxTags: 2,
@@ -135,8 +135,8 @@ export default function Portfolio() {
     {
       title: "rnow rewards",
       description: "loyalty program design, 3rd national",
-      subtitle: "3rd Place National Case Competition",
-      extendedDescription: "Designed a comprehensive loyalty rewards program for a national case competition. The solution focused on customer retention strategies, gamification elements, and data-driven personalization to maximize engagement.",
+      subtitle: "designed for rotman boardroom competition",
+      extendedDescription: "• achieved 3rd out of 55+ teams nationally\n• focus on data-driven retention strategies and gamification elements\n• sparked a passion for technically designing and creating useful products",
       technologies: ["case competition"],
       github: "#",
       maxTags: 1,
@@ -145,8 +145,8 @@ export default function Portfolio() {
     {
       title: "connect four",
       description: "classic game with OOP design",
-      subtitle: "Object-oriented game development",
-      extendedDescription: "A fully functional Connect Four game built in Java with a graphical interface. Implements clean OOP principles including inheritance, encapsulation, and polymorphism. Features include two-player mode and win detection algorithms.",
+      subtitle: "my first ever cs project in hs!",
+      extendedDescription: "• fully functional connect four game with serialized game states and GUI in java\n• implements clean OOP principles (100/100 on the project!)\n• zero ai was used :D",
       technologies: ["java", "swing", "awt"],
       github: "https://github.com/d384zhan/ConnectFour",
       maxTags: 3,
@@ -425,7 +425,7 @@ export default function Portfolio() {
       {/* Projects Section */}
       <section id="projects" className="min-h-screen md:h-screen snap-start snap-always flex flex-col justify-center relative py-8 md:py-12 lg:py-20 overflow-y-auto md:overflow-visible">
         <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-20 w-full">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl italic text-right mb-3 md:mb-4 lg:mb-6">projects</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl italic text-right mb-3 md:mb-4 lg:mb-6 mt-8 md:mt-12">projects</h2>
 
           <div className="flex flex-col gap-2 md:gap-3">
             {/* Chunk projects into rows of 3 */}
@@ -434,7 +434,7 @@ export default function Portfolio() {
               const isRowSelected = selectedProject?.row === rowIndex;
 
               return (
-                <div key={rowIndex} className="flex flex-col md:flex-row gap-2 md:gap-3 w-full h-auto md:h-[18.5rem]">
+                <div key={rowIndex} className="flex flex-col md:flex-row gap-2 md:gap-3 w-full h-auto md:h-[18.1rem]">
                   {rowProjects.map((project, colIndex) => {
                     const isSelected = selectedProject?.row === rowIndex && selectedProject?.col === colIndex;
                     const isRowSelected = selectedProject?.row === rowIndex;
@@ -550,7 +550,7 @@ export default function Portfolio() {
                                 <p className="text-sm font-medium mb-4">{project.subtitle}</p>
                               </div>
                               <div>
-                                <p className="text-sm leading-relaxed text-[#152a38]/80">
+                                <p className="text-sm leading-relaxed text-[#152a38]/80 whitespace-pre-line">
                                   {project.extendedDescription}
                                 </p>
                               </div>
@@ -564,6 +564,14 @@ export default function Portfolio() {
               );
             })}
           </div>
+
+          {/* GitHub link */}
+          <p className="text-center text-xs md:text-sm mt-4 md:mt-6 opacity-70">
+            rest of my projects can be found on{' '}
+            <Link href="https://github.com/d384zhan" target="_blank" className="underline hover:opacity-80 transition-opacity">
+              github
+            </Link>
+          </p>
         </div >
         <div className="absolute bottom-0 left-0 right-0 h-px bg-white/20"></div>
       </section >
