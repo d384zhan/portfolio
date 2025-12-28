@@ -424,7 +424,7 @@ export default function Portfolio() {
 
       {/* Projects Section */}
       <section id="projects" className="min-h-screen md:h-screen snap-start snap-always flex flex-col justify-center relative py-8 md:py-12 lg:py-20 overflow-y-auto md:overflow-visible">
-        <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-20 w-full">
+        <div className="max-w-5xl mx-auto px-4 md:px-12 lg:px-20 w-full">
           <h2 className="text-2xl md:text-3xl lg:text-4xl italic text-right mb-3 md:mb-4 lg:mb-6 mt-8 md:mt-12">projects</h2>
 
           <div className="flex flex-col gap-2 md:gap-3">
@@ -440,18 +440,20 @@ export default function Portfolio() {
                     const isRowSelected = selectedProject?.row === rowIndex;
                     const isSiblingSelected = isRowSelected && !isSelected;
                     const isHovered = hoveredProject?.row === rowIndex && hoveredProject?.col === colIndex;
+                    // Mobile: card is minimized unless it's the selected one
+                    const isMobileMinimized = !isSelected;
 
                     return (
                       <motion.div
                         key={colIndex}
                         className={`
                           bg-[#d2c1b6] text-black p-2 md:p-3 md:pb-3
-                          shadow-2xl border-2 border-[#152a38] cursor-pointer h-full
+                          shadow-2xl border-2 border-[#152a38] cursor-pointer
                           relative overflow-hidden
                           ${isSelected ? 'brightness-110 saturate-150' : (isHovered ? 'brightness-105' : '')}
                           transition-[filter] duration-500
                         `}
-                        layout
+                        layout={typeof window !== 'undefined' && window.innerWidth >= 768 ? true : false}
                         initial={{ flex: 1 }}
                         animate={{
                           flex: isSelected ? 8 : (isRowSelected ? 1 : 1)
@@ -461,13 +463,30 @@ export default function Portfolio() {
                           duration: 0.5,
                           ease: "easeInOut"
                         }}
-                        onClick={() => { }}
-                        onMouseEnter={() => setSelectedProject({ row: rowIndex, col: colIndex })}
-                        onMouseLeave={() => setSelectedProject(null)}
+                        onClick={() => {
+                          // Mobile: toggle on click
+                          if (isSelected) {
+                            setSelectedProject(null);
+                          } else {
+                            setSelectedProject({ row: rowIndex, col: colIndex });
+                          }
+                        }}
+                        onMouseEnter={() => {
+                          // Desktop: hover to select
+                          if (window.innerWidth >= 768) {
+                            setSelectedProject({ row: rowIndex, col: colIndex });
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          // Desktop: hover away to deselect
+                          if (window.innerWidth >= 768) {
+                            setSelectedProject(null);
+                          }
+                        }}
                       >
-                        {/* Minimized Overlay - Absolute positioned for sibling-selected state */}
+                        {/* Minimized Overlay - Desktop only, for sibling-selected state */}
                         <motion.div
-                          className="absolute inset-0 bg-[#d2c1b6] flex items-center justify-center z-10"
+                          className="absolute inset-0 bg-[#d2c1b6] items-center justify-center z-10 hidden md:flex"
                           initial={false}
                           animate={{
                             opacity: isSiblingSelected ? 1 : 0,
@@ -483,38 +502,113 @@ export default function Portfolio() {
                           </span>
                         </motion.div>
 
-                        {/* Main Card Content - Always in DOM */}
+                        {/* Mobile Content - uses AnimatePresence for smooth transitions */}
+                        <div className="md:hidden">
+                          <AnimatePresence mode="wait">
+                            {isMobileMinimized ? (
+                              <motion.div
+                                key="minimized"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className="flex items-center justify-between py-1"
+                              >
+                                <span className="font-bold text-sm text-[#152a38]">{project.title}</span>
+                                <span className="text-[#1b3c53] text-xs">▼</span>
+                              </motion.div>
+                            ) : (
+                              <motion.div
+                                key="expanded"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2, ease: 'easeOut' }}
+                                className="overflow-hidden"
+                              >
+                                {/* Full card content for mobile */}
+                                <div className="flex flex-col">
+                                  <div className="flex items-center justify-between mb-1 w-full">
+                                    <h3 className="text-sm font-bold truncate">{project.title}</h3>
+                                    <div className="flex items-center gap-2">
+                                      {project.github !== "#" && (
+                                        <Link
+                                          href={project.github}
+                                          target="_blank"
+                                          className="text-[#1b3c53] flex-shrink-0 hover:opacity-70 transition-opacity"
+                                          onClick={(e) => e.stopPropagation()}
+                                        >
+                                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                          </svg>
+                                        </Link>
+                                      )}
+                                      <span className="text-[#1b3c53] text-xs">▲</span>
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="w-full bg-white/30 mb-1 overflow-hidden relative"
+                                    style={{ aspectRatio: '1.618 / 1' }}
+                                  >
+                                    <Image
+                                      src={project.image}
+                                      alt={project.title}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  </div>
+                                  <p className="text-[10px] mb-1 leading-tight">{project.description}</p>
+                                  <div className="flex flex-wrap gap-1 mb-2">
+                                    {project.technologies.slice(0, project.maxTags || 3).map((tech, idx) => (
+                                      <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[8px] whitespace-nowrap">{tech}</span>
+                                    ))}
+                                  </div>
+                                  {/* Extended description */}
+                                  <div className="pt-2 border-t border-[#1b3c53]/20">
+                                    <h4 className="text-xs font-bold text-[#152a38] uppercase tracking-wider mb-1">About</h4>
+                                    <p className="text-xs font-medium mb-2">{project.subtitle}</p>
+                                    <p className="text-xs leading-relaxed text-[#152a38]/80 whitespace-pre-line">
+                                      {project.extendedDescription}
+                                    </p>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        {/* Desktop Main Card Content */}
                         <motion.div
-                          className="flex h-full w-full"
+                          className="hidden md:flex flex-row h-full w-full"
                           initial={false}
                           animate={{
                             opacity: isSiblingSelected ? 0 : 1
                           }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                         >
-                          {/* Left Column - Title, Image, Tags (always visible when not minimized) */}
-                          <motion.div
-                            className="flex-none w-full md:w-[268px] flex flex-col justify-between h-full pr-4 border-r border-[#1b3c53]/10"
-                            layout
+                          {/* Left Column - Title, Image, Tags */}
+                          <div
+                            className="flex-none w-full md:w-[268px] flex flex-col justify-between md:h-full md:pr-4 md:border-r border-[#1b3c53]/10"
                           >
                             <div>
                               <div className="flex items-center justify-between mb-1 md:mb-2 w-full">
-                                <motion.h3 layout className="text-base md:text-lg font-bold truncate">{project.title}</motion.h3>
-                                {project.github !== "#" && (
-                                  <Link
-                                    href={project.github}
-                                    target="_blank"
-                                    className="text-[#1b3c53] flex-shrink-0 hover:opacity-70 transition-opacity"
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
-                                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                    </svg>
-                                  </Link>
-                                )}
+                                <h3 className="text-sm md:text-lg font-bold truncate">{project.title}</h3>
+                                <div className="flex items-center gap-2">
+                                  {project.github !== "#" && (
+                                    <Link
+                                      href={project.github}
+                                      target="_blank"
+                                      className="text-[#1b3c53] flex-shrink-0 hover:opacity-70 transition-opacity"
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                                      </svg>
+                                    </Link>
+                                  )}
+                                </div>
                               </div>
-                              <motion.div
-                                layout
+                              <div
                                 className="w-full bg-white/30 mb-1 md:mb-2 overflow-hidden relative"
                                 style={{ aspectRatio: '1.618 / 1' }}
                               >
@@ -524,20 +618,22 @@ export default function Portfolio() {
                                   fill
                                   className="object-cover"
                                 />
-                              </motion.div>
+                              </div>
                               <p className="text-[10px] md:text-xs mb-1 md:mb-2 leading-tight">{project.description}</p>
                             </div>
                             <div>
                               <div className="flex flex-wrap gap-1 mt-auto">
                                 {project.technologies.slice(0, project.maxTags || 3).map((tech, idx) => (
-                                  <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[10px] whitespace-nowrap">{tech}</span>
+                                  <span key={idx} className="bg-[#1b3c53] text-white px-1.5 py-0.5 text-[8px] md:text-[10px] whitespace-nowrap">{tech}</span>
                                 ))}
                               </div>
                             </div>
-                          </motion.div>
+                          </div>
+
                           {/* Right Column - Description/Details (reveal animation) */}
+                          {/* Desktop: horizontal expansion */}
                           <motion.div
-                            className="flex-grow flex flex-col gap-4 h-full overflow-hidden"
+                            className="hidden md:flex flex-grow flex-col gap-4 h-full overflow-hidden"
                             initial={false}
                             animate={{
                               width: isSelected ? 'auto' : 0
@@ -556,6 +652,7 @@ export default function Portfolio() {
                               </div>
                             </div>
                           </motion.div>
+
                         </motion.div>
                       </motion.div>
                     )
