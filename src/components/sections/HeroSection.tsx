@@ -79,10 +79,11 @@ export function HeroSection() {
             />
           </div>
           <div className="w-full md:w-1/2 space-y-4 md:space-y-6">
-            <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl drop-shadow-2xl">
-              yo, i'm{' '}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl drop-shadow-2xl">
+              yo, i'm
+              <br />
               <span
-                className="italic font-bold relative inline-block cursor-help"
+                className="italic font-bold relative inline-block cursor-help text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
                 onMouseEnter={() => setShowDawangTooltip(true)}
                 onMouseLeave={() => setShowDawangTooltip(false)}
               >
@@ -95,11 +96,15 @@ export function HeroSection() {
               !
             </h1>
             <p className="text-sm md:text-base leading-relaxed">
-              i'm currently a second year{' '}
+              i'm currently building healthtech AI voice agents at{' '}
+              <ExternalLink href="https://www.helloblair.com">
+                Blair
+              </ExternalLink>{' '}
+              and studying{' '}
               <ExternalLink href="https://uwaterloo.ca/engineering/future-students/management-engineering">
                 Management Engineering
               </ExternalLink>{' '}
-              student at Waterloo.
+              at Waterloo.
             </p>
             <p className="text-sm md:text-base leading-relaxed">
               i enjoy seeing ideas come to life through tech!

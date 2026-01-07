@@ -8,8 +8,8 @@ export const experiences: Experience[] = [
       {
         id: "6-1",
         title: "Software Engineer",
-        startDate: "Incoming Jan 2026",
-        endDate: "",
+        startDate: "Jan 2026",
+        endDate: "Present",
         description: "building healthcare AI voice agents",
       }
     ]
