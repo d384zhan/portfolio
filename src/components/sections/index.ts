@@ -1,0 +1,5 @@
+export { Navigation } from './Navigation'
+export { HeroSection } from './HeroSection'
+export { ExperienceSection } from './ExperienceSection'
+export { ProjectsSection } from './ProjectsSection'
+export { FooterSection } from './FooterSection'
