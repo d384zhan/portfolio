@@ -10,32 +10,24 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.dawang.tech"),
   title: "Dawang Zhang",
-  description: "dawang zhang's personal website.",
-  keywords: ["Dawang Zhang", "Portfolio", "Software Engineer", "Management Engineering", "Waterloo", "Developer"],
+  description: "software engineer studying management engineering at waterloo.",
+  keywords: ["Dawang Zhang", "Software Engineer", "Management Engineering", "Waterloo"],
   authors: [{ name: "Dawang Zhang" }],
   creator: "Dawang Zhang",
   openGraph: {
-    title: "Dawang Zhang | Portfolio",
-    description: "dawang zhang's personal website.",
-    url: "https://www.dawang.tech", // Replace with actual domain if known, or remove if dynamic
-    siteName: "Dawang Zhang Portfolio",
-    images: [
-      {
-        url: "/me.PNG", // Using the profile picture as the OG image
-        width: 600,
-        height: 700,
-        alt: "Dawang Zhang Profile",
-      },
-    ],
+    title: "Dawang Zhang",
+    description: "software engineer studying management engineering at waterloo.",
+    url: "https://www.dawang.tech",
+    siteName: "Dawang Zhang",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dawang Zhang | Portfolio",
-    description: "dawang zhang's personal website.",
-    images: ["/me.PNG"],
+    title: "Dawang Zhang",
+    description: "software engineer studying management engineering at waterloo.",
   },
   icons: {
     icon: "/Garfield1978.png",

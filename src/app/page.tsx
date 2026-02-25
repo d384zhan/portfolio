@@ -1,7 +1,7 @@
 "use client";
 
 import { Playfair_Display } from "next/font/google";
-import { useState } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const playfair = Playfair_Display({
@@ -24,14 +24,21 @@ const projects = [
   { name: "financial planner", desc: "automated budgeting engine", tech: "excel vba", href: "https://github.com/d384zhan/Financial_Planner" },
 ];
 
-function ExperienceItem({ exp }: { exp: typeof experiences[number] }) {
+function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experiences[number]; touchOpen: boolean; onTouchToggle: () => void }) {
   const [hovered, setHovered] = useState(false);
+  const active = hovered || touchOpen;
 
   return (
-    <div className="cursor-default" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ transform: hovered ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}>
+    <div
+      className="cursor-default"
+      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHovered(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === "mouse") setHovered(false); }}
+      onPointerDown={(e) => { if (e.pointerType !== "mouse") onTouchToggle(); }}
+      style={{ transform: active ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}
+    >
       <div className="flex items-baseline justify-between">
         <span>
-          <span style={{ color: hovered ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}>
+          <span style={{ color: active ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}>
             {exp.name}
           </span>
           {" "}· {exp.role}
@@ -39,7 +46,7 @@ function ExperienceItem({ exp }: { exp: typeof experiences[number] }) {
         <span style={{ color: "#5a5550" }}>{exp.year}</span>
       </div>
       <AnimatePresence>
-        {hovered && (
+        {active && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -57,35 +64,42 @@ function ExperienceItem({ exp }: { exp: typeof experiences[number] }) {
   );
 }
 
-function ProjectItem({ project }: { project: typeof projects[number] }) {
+function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof projects[number]; touchOpen: boolean; onTouchToggle: () => void }) {
   const [hovered, setHovered] = useState(false);
+  const active = hovered || touchOpen;
 
   const nameEl = project.href ? (
     <a
       href={project.href}
       target="_blank"
       rel="noopener noreferrer"
-      style={{ color: hovered ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}
+      style={{ color: active ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}
     >
       {project.name}
     </a>
   ) : (
     <span
       className="cursor-default"
-      style={{ color: hovered ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}
+      style={{ color: active ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}
     >
       {project.name}
     </span>
   );
 
   return (
-    <div className="flex items-baseline justify-between" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{ transform: hovered ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}>
+    <div
+      className="flex items-baseline justify-between"
+      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHovered(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === "mouse") setHovered(false); }}
+      onPointerDown={(e) => { if (e.pointerType !== "mouse") onTouchToggle(); }}
+      style={{ transform: active ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}
+    >
       <span>
         {nameEl}
         <span> · {project.desc}</span>
       </span>
       <AnimatePresence>
-        {hovered && (
+        {active && (
           <motion.span
             initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
             animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
@@ -103,9 +117,29 @@ function ProjectItem({ project }: { project: typeof projects[number] }) {
 }
 
 export default function Home() {
+  const mainRef = useRef<HTMLElement>(null);
+  const [scale, setScale] = useState(1);
+  const [ready, setReady] = useState(false);
+  const [activeTouch, setActiveTouch] = useState<string | null>(null);
+
+  useLayoutEffect(() => {
+    const update = () => {
+      if (!mainRef.current) return;
+      const contentH = mainRef.current.scrollHeight;
+      const viewportH = window.innerHeight;
+      const padding = 80;
+      const available = viewportH - padding;
+      setScale(contentH > available ? available / contentH : 1);
+    };
+    update();
+    setReady(true);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
   return (
     <div
-      className={`${playfair.variable} h-screen flex justify-center items-center overflow-hidden`}
+      className={`${playfair.variable} h-dvh flex justify-center items-center overflow-hidden`}
       style={{
         backgroundColor: "#1c1a18",
         color: "#a5a09a",
@@ -115,7 +149,7 @@ export default function Home() {
         backgroundSize: "16px 16px",
       }}
     >
-      <main className="w-full max-w-[580px] px-6" style={{ height: "85vh", overflow: "visible" }}>
+      <main ref={mainRef} className="w-full max-w-[580px] px-6 overflow-visible" style={{ transform: `scale(${scale})`, transformOrigin: "center center", opacity: ready ? 1 : 0 }}>
 
         {/* Header */}
         <div className="flex items-baseline justify-between mb-6">
@@ -245,9 +279,14 @@ export default function Home() {
           >
             previously
           </h2>
-          <div className="space-y-1.5 text-sm" style={{ height: "6.125rem", overflow: "visible" }}>
+          <div className="space-y-1.5 text-sm md:h-[6.125rem] overflow-visible">
             {experiences.map((exp) => (
-              <ExperienceItem key={exp.name} exp={exp} />
+              <ExperienceItem
+                key={exp.name}
+                exp={exp}
+                touchOpen={activeTouch === `exp-${exp.name}`}
+                onTouchToggle={() => setActiveTouch((prev) => prev === `exp-${exp.name}` ? null : `exp-${exp.name}`)}
+              />
             ))}
           </div>
         </div>
@@ -267,7 +306,12 @@ export default function Home() {
           </h2>
           <div className="space-y-1.5 text-sm">
             {projects.map((project) => (
-              <ProjectItem key={project.name} project={project} />
+              <ProjectItem
+                key={project.name}
+                project={project}
+                touchOpen={activeTouch === `proj-${project.name}`}
+                onTouchToggle={() => setActiveTouch((prev) => prev === `proj-${project.name}` ? null : `proj-${project.name}`)}
+              />
             ))}
             <div className="pt-1">
               <a
