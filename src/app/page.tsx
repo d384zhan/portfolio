@@ -3,6 +3,7 @@
 import { Playfair_Display } from "next/font/google";
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -39,12 +40,12 @@ function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experie
     >
       <div className="flex items-baseline justify-between">
         <span>
-          <span style={{ color: active ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}>
+          <span style={{ color: active ? "var(--accent)" : "var(--highlight)", transition: "color 0.2s" }}>
             {exp.name}
           </span>
           {" "}· {exp.role}
         </span>
-        <span style={{ color: "#5a5550" }}>{exp.year}</span>
+        <span style={{ color: "var(--muted)" }}>{exp.year}</span>
       </div>
       <AnimatePresence>
         {active && (
@@ -55,7 +56,7 @@ function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experie
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <div className="text-xs pt-0.5" style={{ color: "#5a5550" }}>
+            <div className="text-xs pt-0.5" style={{ color: "var(--muted)" }}>
               ↳ {exp.detail}
             </div>
           </motion.div>
@@ -75,14 +76,14 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
       href={project.href}
       target="_blank"
       rel="noopener noreferrer"
-      style={{ color: active ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}
+      style={{ color: active ? "var(--accent)" : "var(--highlight)", transition: "color 0.2s" }}
     >
       {project.name}
     </a>
   ) : (
     <span
       className="cursor-default"
-      style={{ color: active ? "#C85A35" : "#d6d2cc", transition: "color 0.2s" }}
+      style={{ color: active ? "var(--accent)" : "var(--highlight)", transition: "color 0.2s" }}
     >
       {project.name}
     </span>
@@ -108,7 +109,7 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
               exit={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="whitespace-nowrap flex-shrink-0 text-xs pl-3"
-              style={{ color: "#5a5550" }}
+              style={{ color: "var(--muted)" }}
             >
               {project.tech}
             </motion.span>
@@ -124,7 +125,7 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <div className="text-xs pt-0.5" style={{ color: "#5a5550" }}>
+            <div className="text-xs pt-0.5" style={{ color: "var(--muted)" }}>
               ↳ {project.tech}
             </div>
           </motion.div>
@@ -141,17 +142,17 @@ export default function Home() {
     <div
       className={`${playfair.variable} h-dvh w-full overflow-x-hidden overflow-y-auto md:overflow-hidden flex justify-center items-start md:items-center`}
       style={{
-        backgroundColor: "#1c1a18",
-        color: "#a5a09a",
+        backgroundColor: "var(--bg)",
+        color: "var(--text)",
         fontFamily: "var(--font-space-mono), monospace",
         backgroundImage:
-          "radial-gradient(rgba(201,168,124,0.06) 1px, transparent 1px)",
+          "radial-gradient(var(--dot-grid) 1px, transparent 1px)",
         backgroundSize: "16px 16px",
         paddingTop: "env(safe-area-inset-top)",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
-      <main className="w-full max-w-[580px] px-5 md:px-6 py-10 md:py-16">
+      <main className="w-full max-w-[580px] px-5 md:px-6 py-10 md:py-16 relative">
 
         {/* Header */}
         <div className="flex items-baseline justify-between mb-[2.5dvh]">
@@ -160,7 +161,7 @@ export default function Home() {
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
-              color: "#e8e5df",
+              color: "var(--title)",
               fontWeight: 400,
             }}
           >
@@ -174,7 +175,7 @@ export default function Home() {
               >
                 <path
                   d="M0 4 Q7.5 0 15 4 T30 4 T45 4 T60 4 T75 4 T90 4 T105 4 T120 4"
-                  stroke="#ef4444"
+                  stroke="var(--red-underline)"
                   fill="none"
                   strokeWidth="2.5"
                 />
@@ -182,8 +183,8 @@ export default function Home() {
               <span
                 className="absolute -top-9 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2.5 py-1 rounded pointer-events-none text-xs"
                 style={{
-                  backgroundColor: "#2a2420",
-                  color: "#a5a09a",
+                  backgroundColor: "var(--tooltip-bg)",
+                  color: "var(--text)",
                   fontFamily: "var(--font-space-mono), monospace",
                   fontStyle: "normal",
                   fontWeight: 400,
@@ -194,17 +195,18 @@ export default function Home() {
             </span>
             {" "}Zhang
           </h1>
+          <ThemeToggle />
         </div>
 
         {/* Bio */}
-        <p className="text-sm leading-relaxed mb-[3dvh]" style={{ color: "#8a8580" }}>
+        <p className="text-sm leading-relaxed mb-[3dvh]" style={{ color: "var(--bio)" }}>
           i&apos;m currently building healthtech AI voice agents at{" "}
           <a
             href="https://www.helloblair.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-all duration-200 hover:text-[#C85A35] inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "#C85A35" }}
+            className="underline underline-offset-4 transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--accent)" }}
           >
             blair
           </a>{" "}
@@ -213,8 +215,8 @@ export default function Home() {
             href="https://uwaterloo.ca/engineering/future-students/management-engineering"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-all duration-200 hover:text-[#C85A35] inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "#C85A35" }}
+            className="underline underline-offset-4 transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--accent)" }}
           >
             management engineering
           </a>{" "}
@@ -224,8 +226,8 @@ export default function Home() {
             href="https://letterboxd.com/dzahwa/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-all duration-200 hover:text-[#C85A35] inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "#C85A35" }}
+            className="underline underline-offset-4 transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--accent)" }}
           >
             movies
           </a>.
@@ -238,7 +240,7 @@ export default function Home() {
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
-              color: "#C85A35",
+              color: "var(--accent)",
               fontSize: "15px",
             }}
           >
@@ -248,20 +250,20 @@ export default function Home() {
             <div className="flex items-baseline justify-between">
               <span>
                 <span
-                  className="cursor-default transition-all duration-200 hover:text-[#C85A35] inline-block hover:scale-[1.02] origin-left"
-                  style={{ color: "#d6d2cc" }}
+                  className="cursor-default transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+                  style={{ color: "var(--highlight)" }}
                 >
                   Blair AI
                 </span>
                 {" "}· engineering
               </span>
             </div>
-            <div className="text-xs" style={{ color: "#5a5550" }}>
+            <div className="text-xs" style={{ color: "var(--muted)" }}>
               ↳ building healthcare AI voice agents for clinical workflows
             </div>
             <div className="flex items-baseline justify-between mt-2">
               <span>
-                <span className="cursor-default transition-all duration-200 hover:text-[#C85A35] inline-block hover:scale-[1.02] origin-left" style={{ color: "#d6d2cc" }}>UWaterloo</span>
+                <span className="cursor-default transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left" style={{ color: "var(--highlight)" }}>UWaterloo</span>
                 {" "}· management engineering
               </span>
             </div>
@@ -275,7 +277,7 @@ export default function Home() {
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
-              color: "#C85A35",
+              color: "var(--accent)",
               fontSize: "15px",
             }}
           >
@@ -300,7 +302,7 @@ export default function Home() {
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
-              color: "#C85A35",
+              color: "var(--accent)",
               fontSize: "15px",
             }}
           >
@@ -320,8 +322,8 @@ export default function Home() {
                 href="https://github.com/d384zhan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs transition-all duration-200 hover:text-[#C85A35] inline-block hover:scale-[1.02] origin-left"
-                style={{ color: "#5a5550" }}
+                className="text-xs transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+                style={{ color: "var(--muted)" }}
               >
                 rest of my projects →
               </a>
@@ -336,24 +338,24 @@ export default function Home() {
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
-              color: "#C85A35",
+              color: "var(--accent)",
               fontSize: "15px",
             }}
           >
             writing
           </h2>
-          <p className="text-sm" style={{ color: "#5a5550" }}>
+          <p className="text-sm" style={{ color: "var(--muted)" }}>
             nothing here yet — coming soon.
           </p>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-[2dvh]" style={{ borderTop: "1px solid rgba(201,168,124,0.12)" }}>
+        <div className="flex items-center justify-between pt-[2dvh]" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           <div className="flex items-center gap-5 text-xs">
             <a
               href="mailto:d384zhan@uwaterloo.ca"
-              className="transition-all duration-200 hover:text-[#C85A35] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "#6b655e" }}
+              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)" }}
             >
               email
             </a>
@@ -361,8 +363,8 @@ export default function Home() {
               href="https://www.linkedin.com/in/dawang-zhang"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-200 hover:text-[#C85A35] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "#6b655e" }}
+              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)" }}
             >
               linkedin
             </a>
@@ -370,8 +372,8 @@ export default function Home() {
               href="https://github.com/d384zhan"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-200 hover:text-[#C85A35] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "#6b655e" }}
+              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)" }}
             >
               github
             </a>
@@ -379,16 +381,16 @@ export default function Home() {
               href="https://x.com/dawangzh"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-200 hover:text-[#C85A35] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "#6b655e" }}
+              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)" }}
             >
               x
             </a>
           </div>
           <a
             href="https://v1.dawang.tech"
-            className="text-xs transition-all duration-200 hover:text-[#C85A35] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "#5a5550" }}
+            className="text-xs transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--muted)" }}
           >
             v1
           </a>

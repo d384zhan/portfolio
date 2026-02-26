@@ -1,8 +1,41 @@
 @import "tailwindcss";
 
+/* Light mode (default) */
 :root {
-  --background: #1c1a18;
-  --foreground: #a5a09a;
+  --bg: #f5f0e8;
+  --text: #5a5448;
+  --accent: #b84e2c;
+  --highlight: #3d3731;
+  --muted: #8a8278;
+  --bio: #6b6358;
+  --footer-link: #787065;
+  --title: #2c2620;
+  --tooltip-bg: #e8e0d4;
+  --red-underline: #dc3a3a;
+  --dot-grid: rgba(160,130,90,0.08);
+  --border-subtle: rgba(120,100,70,0.15);
+
+  --background: var(--bg);
+  --foreground: var(--text);
+}
+
+/* Dark mode */
+.dark {
+  --bg: #1c1a18;
+  --text: #a5a09a;
+  --accent: #C85A35;
+  --highlight: #d6d2cc;
+  --muted: #5a5550;
+  --bio: #8a8580;
+  --footer-link: #6b655e;
+  --title: #e8e5df;
+  --tooltip-bg: #2a2420;
+  --red-underline: #ef4444;
+  --dot-grid: rgba(201,168,124,0.06);
+  --border-subtle: rgba(201,168,124,0.12);
+
+  --background: var(--bg);
+  --foreground: var(--text);
 }
 
 @theme inline {
@@ -12,8 +45,8 @@
 }
 
 html, body {
-  background: #1c1a18;
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-space-mono), monospace;
   margin: 0;
   padding: 0;
