@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1c1a18;
+  --foreground: #a5a09a;
 }
 
 @theme inline {
@@ -11,17 +11,14 @@
   --font-mono: var(--font-space-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
+html, body {
+  background: #1c1a18;
   color: var(--foreground);
   font-family: var(--font-space-mono), monospace;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 /* Responsive Timeline Bar Positioning */
@@ -51,26 +48,11 @@ body {
   }
 }
 
-/* Custom Scrollbar Styles */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d2c1b6;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #c9b5a8;
-}
-
-/* Firefox */
+/* Hide scrollbars but allow scrolling */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #d2c1b6 transparent;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Playfair_Display } from "next/font/google";
-import { useState, useLayoutEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const playfair = Playfair_Display({
@@ -26,14 +26,15 @@ const projects = [
 
 function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experiences[number]; touchOpen: boolean; onTouchToggle: () => void }) {
   const [hovered, setHovered] = useState(false);
+  const touchUsed = useRef(false);
   const active = hovered || touchOpen;
 
   return (
     <div
       className="cursor-default"
-      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHovered(true); }}
-      onPointerLeave={(e) => { if (e.pointerType === "mouse") setHovered(false); }}
-      onPointerDown={(e) => { if (e.pointerType !== "mouse") onTouchToggle(); }}
+      onMouseEnter={() => { if (!touchUsed.current) setHovered(true); }}
+      onMouseLeave={() => { if (!touchUsed.current) setHovered(false); }}
+      onTouchEnd={() => { touchUsed.current = true; onTouchToggle(); }}
       style={{ transform: active ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}
     >
       <div className="flex items-baseline justify-between">
@@ -66,6 +67,7 @@ function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experie
 
 function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof projects[number]; touchOpen: boolean; onTouchToggle: () => void }) {
   const [hovered, setHovered] = useState(false);
+  const touchUsed = useRef(false);
   const active = hovered || touchOpen;
 
   const nameEl = project.href ? (
@@ -88,28 +90,44 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
 
   return (
     <div
-      className="flex items-baseline justify-between"
-      onPointerEnter={(e) => { if (e.pointerType === "mouse") setHovered(true); }}
-      onPointerLeave={(e) => { if (e.pointerType === "mouse") setHovered(false); }}
-      onPointerDown={(e) => { if (e.pointerType !== "mouse") onTouchToggle(); }}
+      onMouseEnter={() => { if (!touchUsed.current) setHovered(true); }}
+      onMouseLeave={() => { if (!touchUsed.current) setHovered(false); }}
+      onTouchEnd={() => { touchUsed.current = true; onTouchToggle(); }}
       style={{ transform: active ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}
     >
-      <span>
-        {nameEl}
-        <span> · {project.desc}</span>
-      </span>
+      <div className="flex items-baseline justify-between">
+        <span>
+          {nameEl}
+          <span> · {project.desc}</span>
+        </span>
+        <AnimatePresence>
+          {hovered && !touchOpen && (
+            <motion.span
+              initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+              animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
+              exit={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="whitespace-nowrap flex-shrink-0 text-xs pl-3"
+              style={{ color: "#5a5550" }}
+            >
+              {project.tech}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </div>
       <AnimatePresence>
-        {active && (
-          <motion.span
-            initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-            animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
-            exit={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="whitespace-nowrap flex-shrink-0 text-xs pl-3"
-            style={{ color: "#5a5550" }}
+        {touchOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="overflow-hidden"
           >
-            {project.tech}
-          </motion.span>
+            <div className="text-xs pt-0.5" style={{ color: "#5a5550" }}>
+              ↳ {project.tech}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -117,29 +135,11 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
 }
 
 export default function Home() {
-  const mainRef = useRef<HTMLElement>(null);
-  const [scale, setScale] = useState(1);
-  const [ready, setReady] = useState(false);
   const [activeTouch, setActiveTouch] = useState<string | null>(null);
-
-  useLayoutEffect(() => {
-    const update = () => {
-      if (!mainRef.current) return;
-      const contentH = mainRef.current.scrollHeight;
-      const viewportH = window.innerHeight;
-      const padding = 80;
-      const available = viewportH - padding;
-      setScale(contentH > available ? available / contentH : 1);
-    };
-    update();
-    setReady(true);
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
 
   return (
     <div
-      className={`${playfair.variable} h-dvh flex justify-center items-center overflow-hidden`}
+      className={`${playfair.variable} h-dvh w-full overflow-x-hidden overflow-y-auto md:overflow-hidden flex justify-center items-start md:items-center`}
       style={{
         backgroundColor: "#1c1a18",
         color: "#a5a09a",
@@ -147,12 +147,14 @@ export default function Home() {
         backgroundImage:
           "radial-gradient(rgba(201,168,124,0.06) 1px, transparent 1px)",
         backgroundSize: "16px 16px",
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
-      <main ref={mainRef} className="w-full max-w-[580px] px-6 overflow-visible" style={{ transform: `scale(${scale})`, transformOrigin: "center center", opacity: ready ? 1 : 0 }}>
+      <main className="w-full max-w-[580px] px-5 md:px-6 py-10 md:py-16">
 
         {/* Header */}
-        <div className="flex items-baseline justify-between mb-6">
+        <div className="flex items-baseline justify-between mb-[2.5dvh]">
           <h1
             className="text-3xl md:text-4xl tracking-tight"
             style={{
@@ -195,7 +197,7 @@ export default function Home() {
         </div>
 
         {/* Bio */}
-        <p className="text-sm leading-relaxed mb-7" style={{ color: "#8a8580" }}>
+        <p className="text-sm leading-relaxed mb-[3dvh]" style={{ color: "#8a8580" }}>
           i&apos;m currently building healthtech AI voice agents at{" "}
           <a
             href="https://www.helloblair.com"
@@ -230,9 +232,9 @@ export default function Home() {
         </p>
 
         {/* Currently */}
-        <div className="mb-7">
+        <div className="mb-[3dvh]">
           <h2
-            className="mb-3"
+            className="mb-[1dvh]"
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
@@ -267,9 +269,9 @@ export default function Home() {
         </div>
 
         {/* Previously */}
-        <div className="mb-7">
+        <div className="mb-[3dvh]">
           <h2
-            className="mb-3"
+            className="mb-[1dvh]"
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
@@ -279,7 +281,7 @@ export default function Home() {
           >
             previously
           </h2>
-          <div className="space-y-1.5 text-sm md:h-[6.125rem] overflow-visible">
+          <div className="space-y-1.5 text-sm md:h-[6.125rem] md:overflow-visible">
             {experiences.map((exp) => (
               <ExperienceItem
                 key={exp.name}
@@ -292,9 +294,9 @@ export default function Home() {
         </div>
 
         {/* Projects */}
-        <div className="mb-7">
+        <div className="mb-[3dvh]">
           <h2
-            className="mb-3"
+            className="mb-[1dvh]"
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
@@ -328,9 +330,9 @@ export default function Home() {
         </div>
 
         {/* Writing */}
-        <div className="mb-7">
+        <div className="mb-[3dvh]">
           <h2
-            className="mb-3"
+            className="mb-[1dvh]"
             style={{
               fontFamily: "var(--font-playfair), serif",
               fontStyle: "italic",
@@ -346,7 +348,7 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid rgba(201,168,124,0.12)" }}>
+        <div className="flex items-center justify-between pt-[2dvh]" style={{ borderTop: "1px solid rgba(201,168,124,0.12)" }}>
           <div className="flex items-center gap-5 text-xs">
             <a
               href="mailto:d384zhan@uwaterloo.ca"

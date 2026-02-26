@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -8,6 +8,15 @@ const spaceMono = Space_Mono({
   subsets: ["latin"],
   variable: "--font-space-mono",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#1c1a18",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.dawang.tech"),
@@ -33,6 +42,11 @@ export const metadata: Metadata = {
     icon: "/Garfield1978.png",
     apple: "/Garfield1978.png",
     shortcut: "/Garfield1978.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Dawang Zhang",
   },
 };
 
