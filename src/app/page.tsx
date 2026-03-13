@@ -1,8 +1,118 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
+
+function useTypewriter(
+  from: string,
+  to: string,
+  active: boolean,
+  speed = 30,
+  lingerMs = 0,
+) {
+  const [text, setText] = useState(from);
+  const rafRef = useRef<number | null>(null);
+  const lingerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stateRef = useRef<{
+    target: string;
+    current: string;
+    phase: "deleting" | "typing";
+    idx: number;
+  }>({
+    target: from,
+    current: from,
+    phase: "deleting",
+    idx: from.length,
+  });
+  const lastTickRef = useRef(0);
+
+  const animate = useCallback(
+    (timestamp: number) => {
+      const elapsed = timestamp - lastTickRef.current;
+      const charsThisFrame = Math.max(
+        1,
+        Math.floor(elapsed / Math.max(speed, 1)),
+      );
+      lastTickRef.current = timestamp;
+
+      const s = stateRef.current;
+      let changed = false;
+
+      for (let i = 0; i < charsThisFrame; i++) {
+        if (s.phase === "deleting") {
+          if (s.idx > 0) {
+            s.idx--;
+            s.current = s.current.slice(0, s.idx);
+            changed = true;
+          } else {
+            s.phase = "typing";
+            s.idx = 0;
+            break;
+          }
+        } else {
+          if (s.idx < s.target.length) {
+            s.idx++;
+            s.current = s.target.slice(0, s.idx);
+            changed = true;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if (changed) setText(s.current);
+      if (s.phase === "deleting" || s.idx < s.target.length) {
+        rafRef.current = requestAnimationFrame(animate);
+      }
+    },
+    [speed],
+  );
+
+  const startAnimation = useCallback(
+    (target: string, current: string) => {
+      stateRef.current = {
+        target,
+        current,
+        phase: "deleting",
+        idx: current.length,
+      };
+      lastTickRef.current = performance.now();
+      rafRef.current = requestAnimationFrame(animate);
+    },
+    [animate],
+  );
+
+  useEffect(() => {
+    const target = active ? to : from;
+    if (
+      stateRef.current.target === target &&
+      stateRef.current.current === target
+    )
+      return;
+
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    if (lingerRef.current) clearTimeout(lingerRef.current);
+
+    const current = stateRef.current.current;
+
+    // Linger before reverting (unhover), start immediately on hover
+    if (!active && lingerMs > 0) {
+      lingerRef.current = setTimeout(() => {
+        startAnimation(target, current);
+      }, lingerMs);
+    } else {
+      startAnimation(target, current);
+    }
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (lingerRef.current) clearTimeout(lingerRef.current);
+    };
+  }, [active, from, to, animate, lingerMs, startAnimation]);
+
+  return text;
+}
 
 const experiences = [
   {
@@ -34,26 +144,26 @@ const experiences = [
 const projects = [
   {
     name: "steerio",
-    desc: "live guardrails for voice agents",
-    tech: "python · livekit · websockets",
+    desc: "real-time guardrails for voice agents",
+    tech: "python · livekit · gemini · websockets",
     href: "https://github.com/d384zhan/steerio",
   },
   {
     name: "coinpilot",
-    desc: "AI crypto market sim",
-    tech: "next.js · python · gemini",
+    desc: "AI-powered crypto market simulator",
+    tech: "next.js · flask · gemini · supabase",
     href: "https://github.com/d384zhan/htv-x",
   },
   {
     name: "familink",
-    desc: "family connection platform",
-    tech: "react · firebase · openai",
+    desc: "AI family connection platform",
+    tech: "react · vite · firebase · openai",
     href: "https://github.com/d384zhan/familink.ai",
   },
   {
     name: "rnow rewards",
-    desc: "loyalty program product design",
-    tech: "3rd national",
+    desc: "loyalty rewards product design",
+    tech: "figma · user research · prototyping",
     href: null,
   },
 ];
@@ -86,9 +196,8 @@ function ExperienceItem({
       }}
       style={{
         transform: active ? "scale(1.02)" : "scale(1)",
-        opacity: active ? 0.85 : 1,
         transition:
-          "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+          "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease",
         transformOrigin: "left center",
       }}
     >
@@ -97,14 +206,16 @@ function ExperienceItem({
           <span
             style={{
               color: active ? "var(--accent)" : "var(--highlight)",
-              transition: "color 0.2s",
+              transition: "color 0.2s, background-color 0.4s ease",
             }}
           >
             {exp.name}
           </span>{" "}
           · {exp.role}
         </span>
-        <span style={{ color: "var(--muted)" }}>{exp.year}</span>
+        <span style={{ color: "var(--muted)", transition: "color 0.2s ease" }}>
+          {exp.year}
+        </span>
       </div>
       <AnimatePresence>
         {active && exp.detail && (
@@ -137,6 +248,13 @@ function ProjectItem({
   const [hovered, setHovered] = useState(false);
   const touchUsed = useRef(false);
   const active = hovered || touchOpen;
+  const typewriterText = useTypewriter(
+    project.desc,
+    project.tech,
+    hovered && !touchOpen,
+    10,
+    800,
+  );
 
   const nameEl = project.href ? (
     <a
@@ -145,7 +263,7 @@ function ProjectItem({
       rel="noopener noreferrer"
       style={{
         color: active ? "var(--accent)" : "var(--highlight)",
-        transition: "color 0.2s",
+        transition: "color 0.2s ease",
       }}
     >
       {project.name}
@@ -155,7 +273,7 @@ function ProjectItem({
       className="cursor-default"
       style={{
         color: active ? "var(--accent)" : "var(--highlight)",
-        transition: "color 0.2s",
+        transition: "color 0.2s ease",
       }}
     >
       {project.name}
@@ -176,48 +294,36 @@ function ProjectItem({
       }}
       style={{
         transform: active ? "scale(1.02)" : "scale(1)",
-        opacity: active ? 0.85 : 1,
         transition:
-          "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+          "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease",
         transformOrigin: "left center",
       }}
     >
-      <div className="flex items-baseline justify-between overflow-hidden">
-        <motion.span
-          className="overflow-hidden whitespace-nowrap"
-          animate={{
-            flexShrink: hovered && !touchOpen ? 1 : 0,
-            opacity: active ? 0.85 : 1,
-          }}
-          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-          style={{
-            maskImage:
-              hovered && !touchOpen
-                ? "linear-gradient(to right, black 80%, transparent 100%)"
-                : "none",
-            WebkitMaskImage:
-              hovered && !touchOpen
-                ? "linear-gradient(to right, black 80%, transparent 100%)"
-                : "none",
-          }}
-        >
+      <div className="flex items-baseline justify-between">
+        <span className="whitespace-nowrap overflow-hidden">
           {nameEl}
-          <span> · {project.desc}</span>
-        </motion.span>
-        <AnimatePresence>
-          {hovered && !touchOpen && (
-            <motion.span
-              initial={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-              animate={{ clipPath: "inset(0 0% 0 0)", opacity: 1 }}
-              exit={{ clipPath: "inset(0 100% 0 0)", opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="whitespace-nowrap flex-shrink-0 text-xs pl-3"
-              style={{ color: "var(--muted)" }}
-            >
-              {project.tech}
-            </motion.span>
-          )}
-        </AnimatePresence>
+          <span
+            style={{
+              color: hovered && !touchOpen ? "var(--muted)" : undefined,
+              transition: "color 0.2s",
+            }}
+          >
+            {" "}
+            · {typewriterText}
+            <span
+              className="inline-block w-px animate-pulse"
+              style={{
+                borderRight: active
+                  ? "1.5px solid var(--muted)"
+                  : "1.5px solid transparent",
+                height: "1em",
+                verticalAlign: "text-bottom",
+                marginLeft: "1px",
+                transition: "border-color 0.2s",
+              }}
+            />
+          </span>
+        </span>
       </div>
       <AnimatePresence>
         {touchOpen && (
@@ -253,13 +359,12 @@ export default function Home() {
         backgroundColor: "var(--bg)",
         color: "var(--text)",
         fontFamily: "var(--font-space-mono), monospace",
-        backgroundImage:
-          "radial-gradient(var(--dot-grid) 1px, transparent 1px)",
-        backgroundSize: "18px 18px",
         paddingTop: "env(safe-area-inset-top)",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
+      {/* Dot grid overlay */}
+      <div className="dot-overlay" />
       {/* Grain texture overlay */}
       <div className="grain-overlay" />
       <main className="w-full max-w-[580px] px-5 md:px-6 py-10 md:py-16 relative">
@@ -272,6 +377,7 @@ export default function Home() {
               fontStyle: "italic",
               color: "var(--title)",
               fontWeight: 400,
+              transition: "color 0.2s ease",
             }}
           >
             <span className="relative inline-block group cursor-default">
@@ -364,49 +470,64 @@ export default function Home() {
             <div
               className="cursor-default"
               style={{
+                transform: "scale(1)",
                 transition:
-                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease",
                 transformOrigin: "left center",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.02)";
-                e.currentTarget.style.opacity = "0.85";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.opacity = "1";
               }}
             >
               <div className="flex items-baseline justify-between">
                 <span>
-                  <span style={{ color: "var(--highlight)" }}>Blair AI</span> ·
-                  engineering
+                  <span
+                    style={{
+                      color: "var(--highlight)",
+                      transition: "color 0.2s ease",
+                    }}
+                  >
+                    Blair AI
+                  </span>{" "}
+                  · engineering
                 </span>
               </div>
-              <div className="text-xs pt-0.5" style={{ color: "var(--muted)" }}>
+              <div
+                className="text-xs pt-0.5"
+                style={{ color: "var(--muted)", transition: "color 0.2s ease" }}
+              >
                 ↳ building healthcare AI voice agents for clinical workflows
               </div>
             </div>
             <div
               className="cursor-default"
               style={{
+                transform: "scale(1)",
                 transition:
-                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease",
                 transformOrigin: "left center",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.02)";
-                e.currentTarget.style.opacity = "0.85";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.opacity = "1";
               }}
             >
               <div className="flex items-baseline justify-between">
                 <span>
-                  <span style={{ color: "var(--highlight)" }}>UWaterloo</span> ·
-                  management engineering
+                  <span
+                    style={{
+                      color: "var(--highlight)",
+                      transition: "color 0.2s ease",
+                    }}
+                  >
+                    UWaterloo
+                  </span>{" "}
+                  · management engineering
                 </span>
               </div>
             </div>
