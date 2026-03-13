@@ -2,37 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-
-function SunIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="5" />
-      <line x1="12" y1="1" x2="12" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="23" />
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-      <line x1="1" y1="12" x2="3" y2="12" />
-      <line x1="21" y1="12" x2="23" y2="12" />
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-  );
-}
-
-function MoonIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </svg>
-  );
-}
-
-/*
- * Track: 56 × 26, border 1px → inner 54 × 24
- * Dot:   18 × 18, inset 3px → centers at x=12 (left) and x=42 (right)
- * Icons: 12 × 12, left-[6px] center=12, right-[6px] center=42 → aligned with dot
- */
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -40,41 +9,49 @@ export function ThemeToggle() {
 
   useEffect(() => setMounted(true), []);
 
-  if (!mounted) return <div className="w-[56px] h-[26px]" />;
-
-  const isDark = resolvedTheme === "dark";
+  // Before hydration, render both characters unstyled so they're always visible
+  const isDark = mounted ? resolvedTheme === "dark" : null;
 
   return (
-    <button
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative w-[56px] h-[26px] rounded-full cursor-pointer transition-colors duration-300 flex-shrink-0"
-      style={{
-        backgroundColor: "var(--tooltip-bg)",
-        border: "1px solid var(--border-subtle)",
-      }}
-      aria-label="Toggle theme"
+    <div
+      className="flex items-center gap-1 text-xs select-none"
+      style={{ fontFamily: "var(--font-space-mono), monospace" }}
     >
-      {/* Sliding accent dot — behind icons */}
-      <motion.span
-        className="absolute top-1/2 -translate-y-1/2 w-[18px] h-[18px] rounded-full"
-        style={{ backgroundColor: "var(--accent)", opacity: 0.2 }}
-        animate={{ left: isDark ? "calc(100% - 21px)" : "3px" }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      />
-
-      {/* Icons — on top of dot */}
-      <span
-        className="absolute left-[6px] top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-all duration-200"
-        style={{ color: isDark ? "var(--muted)" : "var(--accent)" }}
+      <button
+        onClick={() => setTheme("light")}
+        className="cursor-pointer"
+        style={{
+          color:
+            isDark === null
+              ? "var(--muted)"
+              : isDark
+                ? "var(--muted)"
+                : "var(--highlight)",
+          fontWeight: isDark === false ? 700 : 400,
+          transition: "color 0.3s ease, font-weight 0.3s ease",
+        }}
+        aria-label="Light mode"
       >
-        <SunIcon />
-      </span>
-      <span
-        className="absolute right-[6px] top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-all duration-200"
-        style={{ color: isDark ? "var(--accent)" : "var(--muted)" }}
+        日
+      </button>
+      <span style={{ color: "var(--muted)" }}>/</span>
+      <button
+        onClick={() => setTheme("dark")}
+        className="cursor-pointer"
+        style={{
+          color:
+            isDark === null
+              ? "var(--muted)"
+              : isDark
+                ? "var(--highlight)"
+                : "var(--muted)",
+          fontWeight: isDark === true ? 700 : 400,
+          transition: "color 0.3s ease, font-weight 0.3s ease",
+        }}
+        aria-label="Dark mode"
       >
-        <MoonIcon />
-      </span>
-    </button>
+        月
+      </button>
+    </div>
   );
 }

@@ -1,31 +1,72 @@
 "use client";
 
-import { Playfair_Display } from "next/font/google";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
 const experiences = [
-  { name: "Greenhouse Juice", role: "engineering", year: "2025", detail: "built internal tools and data pipelines for operations" },
-  { name: "Wat.ai", role: "engineering", year: "2025", detail: "predictive models for oil drilling operations at orecast" },
-  { name: "Midnight Sun", role: "engineering", year: "2025", detail: "vehicle telemetry and embedded systems for solar car racing" },
-  { name: "Sunnybrook Hospital", role: "data", year: "2023", detail: "data analysis and visualization for finance and operations" },
+  {
+    name: "Greenhouse Juice",
+    role: "engineering",
+    year: "2025",
+    detail: "built internal tools and data pipelines for operations",
+  },
+  {
+    name: "Wat.ai",
+    role: "engineering",
+    year: "2025",
+    detail: "predictive models for oil drilling operations at orecast",
+  },
+  {
+    name: "Midnight Sun",
+    role: "engineering",
+    year: "2025",
+    detail: "vehicle telemetry and embedded systems for solar car racing",
+  },
+  {
+    name: "Sunnybrook Hospital",
+    role: "data",
+    year: "2023",
+    detail: "data analysis and visualization for finance and operations",
+  },
 ];
 
 const projects = [
-  { name: "coinpilot", desc: "AI crypto market sim", tech: "next.js · python · gemini", href: "https://github.com/d384zhan/htv-x" },
-  { name: "familink", desc: "family connection platform", tech: "react · firebase · openai", href: "https://github.com/d384zhan/familink.ai" },
-  { name: "rnow rewards", desc: "loyalty program product design", tech: "3rd national", href: null },
-  { name: "financial planner", desc: "automated budgeting engine", tech: "excel vba", href: "https://github.com/d384zhan/Financial_Planner" },
+  {
+    name: "steerio",
+    desc: "live guardrails for voice agents",
+    tech: "python · livekit · websockets",
+    href: "https://github.com/d384zhan/steerio",
+  },
+  {
+    name: "coinpilot",
+    desc: "AI crypto market sim",
+    tech: "next.js · python · gemini",
+    href: "https://github.com/d384zhan/htv-x",
+  },
+  {
+    name: "familink",
+    desc: "family connection platform",
+    tech: "react · firebase · openai",
+    href: "https://github.com/d384zhan/familink.ai",
+  },
+  {
+    name: "rnow rewards",
+    desc: "loyalty program product design",
+    tech: "3rd national",
+    href: null,
+  },
 ];
 
-function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experiences[number]; touchOpen: boolean; onTouchToggle: () => void }) {
+function ExperienceItem({
+  exp,
+  touchOpen,
+  onTouchToggle,
+}: {
+  exp: (typeof experiences)[number];
+  touchOpen: boolean;
+  onTouchToggle: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
   const touchUsed = useRef(false);
   const active = hovered || touchOpen;
@@ -33,22 +74,40 @@ function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experie
   return (
     <div
       className="cursor-default"
-      onMouseEnter={() => { if (!touchUsed.current) setHovered(true); }}
-      onMouseLeave={() => { if (!touchUsed.current) setHovered(false); }}
-      onTouchEnd={() => { touchUsed.current = true; onTouchToggle(); }}
-      style={{ transform: active ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}
+      onMouseEnter={() => {
+        if (!touchUsed.current) setHovered(true);
+      }}
+      onMouseLeave={() => {
+        if (!touchUsed.current) setHovered(false);
+      }}
+      onTouchEnd={() => {
+        touchUsed.current = true;
+        onTouchToggle();
+      }}
+      style={{
+        transform: active ? "scale(1.02)" : "scale(1)",
+        opacity: active ? 0.85 : 1,
+        transition:
+          "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+        transformOrigin: "left center",
+      }}
     >
       <div className="flex items-baseline justify-between">
         <span>
-          <span style={{ color: active ? "var(--accent)" : "var(--highlight)", transition: "color 0.2s" }}>
+          <span
+            style={{
+              color: active ? "var(--accent)" : "var(--highlight)",
+              transition: "color 0.2s",
+            }}
+          >
             {exp.name}
-          </span>
-          {" "}· {exp.role}
+          </span>{" "}
+          · {exp.role}
         </span>
         <span style={{ color: "var(--muted)" }}>{exp.year}</span>
       </div>
       <AnimatePresence>
-        {active && (
+        {active && exp.detail && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -66,7 +125,15 @@ function ExperienceItem({ exp, touchOpen, onTouchToggle }: { exp: typeof experie
   );
 }
 
-function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof projects[number]; touchOpen: boolean; onTouchToggle: () => void }) {
+function ProjectItem({
+  project,
+  touchOpen,
+  onTouchToggle,
+}: {
+  project: (typeof projects)[number];
+  touchOpen: boolean;
+  onTouchToggle: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
   const touchUsed = useRef(false);
   const active = hovered || touchOpen;
@@ -76,14 +143,20 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
       href={project.href}
       target="_blank"
       rel="noopener noreferrer"
-      style={{ color: active ? "var(--accent)" : "var(--highlight)", transition: "color 0.2s" }}
+      style={{
+        color: active ? "var(--accent)" : "var(--highlight)",
+        transition: "color 0.2s",
+      }}
     >
       {project.name}
     </a>
   ) : (
     <span
       className="cursor-default"
-      style={{ color: active ? "var(--accent)" : "var(--highlight)", transition: "color 0.2s" }}
+      style={{
+        color: active ? "var(--accent)" : "var(--highlight)",
+        transition: "color 0.2s",
+      }}
     >
       {project.name}
     </span>
@@ -91,16 +164,46 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
 
   return (
     <div
-      onMouseEnter={() => { if (!touchUsed.current) setHovered(true); }}
-      onMouseLeave={() => { if (!touchUsed.current) setHovered(false); }}
-      onTouchEnd={() => { touchUsed.current = true; onTouchToggle(); }}
-      style={{ transform: active ? "scale(1.02)" : "scale(1)", transition: "transform 0.2s", transformOrigin: "left center" }}
+      onMouseEnter={() => {
+        if (!touchUsed.current) setHovered(true);
+      }}
+      onMouseLeave={() => {
+        if (!touchUsed.current) setHovered(false);
+      }}
+      onTouchEnd={() => {
+        touchUsed.current = true;
+        onTouchToggle();
+      }}
+      style={{
+        transform: active ? "scale(1.02)" : "scale(1)",
+        opacity: active ? 0.85 : 1,
+        transition:
+          "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+        transformOrigin: "left center",
+      }}
     >
-      <div className="flex items-baseline justify-between">
-        <span>
+      <div className="flex items-baseline justify-between overflow-hidden">
+        <motion.span
+          className="overflow-hidden whitespace-nowrap"
+          animate={{
+            flexShrink: hovered && !touchOpen ? 1 : 0,
+            opacity: active ? 0.85 : 1,
+          }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+          style={{
+            maskImage:
+              hovered && !touchOpen
+                ? "linear-gradient(to right, black 80%, transparent 100%)"
+                : "none",
+            WebkitMaskImage:
+              hovered && !touchOpen
+                ? "linear-gradient(to right, black 80%, transparent 100%)"
+                : "none",
+          }}
+        >
           {nameEl}
           <span> · {project.desc}</span>
-        </span>
+        </motion.span>
         <AnimatePresence>
           {hovered && !touchOpen && (
             <motion.span
@@ -137,23 +240,29 @@ function ProjectItem({ project, touchOpen, onTouchToggle }: { project: typeof pr
 
 export default function Home() {
   const [activeTouch, setActiveTouch] = useState<string | null>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setReady(true));
+  }, []);
 
   return (
     <div
-      className={`${playfair.variable} h-dvh w-full overflow-x-hidden overflow-y-auto md:overflow-hidden flex justify-center items-start md:items-center`}
+      className={`theme-transition${ready ? " ready" : ""} h-dvh w-full overflow-x-clip overflow-y-auto md:overflow-hidden flex justify-center items-start md:items-center relative`}
       style={{
         backgroundColor: "var(--bg)",
         color: "var(--text)",
         fontFamily: "var(--font-space-mono), monospace",
         backgroundImage:
           "radial-gradient(var(--dot-grid) 1px, transparent 1px)",
-        backgroundSize: "16px 16px",
+        backgroundSize: "18px 18px",
         paddingTop: "env(safe-area-inset-top)",
         paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
+      {/* Grain texture overlay */}
+      <div className="grain-overlay" />
       <main className="w-full max-w-[580px] px-5 md:px-6 py-10 md:py-16 relative">
-
         {/* Header */}
         <div className="flex items-baseline justify-between mb-[2.5dvh]">
           <h1
@@ -181,7 +290,7 @@ export default function Home() {
                 />
               </svg>
               <span
-                className="absolute -top-9 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2.5 py-1 rounded pointer-events-none text-xs"
+                className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2.5 py-1 rounded pointer-events-none text-xs z-10"
                 style={{
                   backgroundColor: "var(--tooltip-bg)",
                   color: "var(--text)",
@@ -190,16 +299,20 @@ export default function Home() {
                   fontWeight: 400,
                 }}
               >
-                大王 means &quot;emperor&quot; or &quot;big king&quot; in Chinese!
+                大王 means &quot;emperor&quot; or &quot;big king&quot; in
+                Chinese!
               </span>
-            </span>
-            {" "}Zhang
+            </span>{" "}
+            <span>Zhang</span>
           </h1>
           <ThemeToggle />
         </div>
 
         {/* Bio */}
-        <p className="text-sm leading-relaxed mb-[3dvh]" style={{ color: "var(--bio)" }}>
+        <p
+          className="text-sm leading-relaxed mb-[3dvh]"
+          style={{ color: "var(--bio)" }}
+        >
           i&apos;m currently building healthtech AI voice agents at{" "}
           <a
             href="https://www.helloblair.com"
@@ -220,8 +333,8 @@ export default function Home() {
           >
             management engineering
           </a>{" "}
-          at waterloo. i enjoy seeing ideas come to life through tech.
-          in my free time, you&apos;ll probably catch me watching some{" "}
+          at waterloo. i enjoy seeing ideas come to life through tech. in my
+          free time, you&apos;ll probably catch me watching some{" "}
           <a
             href="https://letterboxd.com/dzahwa/"
             target="_blank"
@@ -230,7 +343,8 @@ export default function Home() {
             style={{ color: "var(--accent)" }}
           >
             movies
-          </a>.
+          </a>
+          .
         </p>
 
         {/* Currently */}
@@ -247,25 +361,54 @@ export default function Home() {
             currently
           </h2>
           <div className="space-y-1.5 text-sm">
-            <div className="flex items-baseline justify-between">
-              <span>
-                <span
-                  className="cursor-default transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
-                  style={{ color: "var(--highlight)" }}
-                >
-                  Blair AI
+            <div
+              className="cursor-default"
+              style={{
+                transition:
+                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+                transformOrigin: "left center",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.02)";
+                e.currentTarget.style.opacity = "0.85";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              <div className="flex items-baseline justify-between">
+                <span>
+                  <span style={{ color: "var(--highlight)" }}>Blair AI</span> ·
+                  engineering
                 </span>
-                {" "}· engineering
-              </span>
+              </div>
+              <div className="text-xs pt-0.5" style={{ color: "var(--muted)" }}>
+                ↳ building healthcare AI voice agents for clinical workflows
+              </div>
             </div>
-            <div className="text-xs" style={{ color: "var(--muted)" }}>
-              ↳ building healthcare AI voice agents for clinical workflows
-            </div>
-            <div className="flex items-baseline justify-between mt-2">
-              <span>
-                <span className="cursor-default transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left" style={{ color: "var(--highlight)" }}>UWaterloo</span>
-                {" "}· management engineering
-              </span>
+            <div
+              className="cursor-default"
+              style={{
+                transition:
+                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.25s ease",
+                transformOrigin: "left center",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.02)";
+                e.currentTarget.style.opacity = "0.85";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              <div className="flex items-baseline justify-between">
+                <span>
+                  <span style={{ color: "var(--highlight)" }}>UWaterloo</span> ·
+                  management engineering
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -289,7 +432,11 @@ export default function Home() {
                 key={exp.name}
                 exp={exp}
                 touchOpen={activeTouch === `exp-${exp.name}`}
-                onTouchToggle={() => setActiveTouch((prev) => prev === `exp-${exp.name}` ? null : `exp-${exp.name}`)}
+                onTouchToggle={() =>
+                  setActiveTouch((prev) =>
+                    prev === `exp-${exp.name}` ? null : `exp-${exp.name}`,
+                  )
+                }
               />
             ))}
           </div>
@@ -314,7 +461,13 @@ export default function Home() {
                 key={project.name}
                 project={project}
                 touchOpen={activeTouch === `proj-${project.name}`}
-                onTouchToggle={() => setActiveTouch((prev) => prev === `proj-${project.name}` ? null : `proj-${project.name}`)}
+                onTouchToggle={() =>
+                  setActiveTouch((prev) =>
+                    prev === `proj-${project.name}`
+                      ? null
+                      : `proj-${project.name}`,
+                  )
+                }
               />
             ))}
             <div className="pt-1">
@@ -350,7 +503,10 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-[2dvh]" style={{ borderTop: "1px solid var(--border-subtle)" }}>
+        <div
+          className="flex items-center justify-between pt-[2dvh]"
+          style={{ borderTop: "1px solid var(--border-subtle)" }}
+        >
           <div className="flex items-center gap-5 text-xs">
             <a
               href="mailto:d384zhan@uwaterloo.ca"

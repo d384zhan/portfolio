@@ -1,38 +1,42 @@
 @import "tailwindcss";
 
-/* Light mode (default) */
+/* Light mode (default) — warm kraft paper */
 :root {
-  --bg: #f5f0e8;
-  --text: #5a5448;
-  --accent: #b84e2c;
-  --highlight: #3d3731;
-  --muted: #8a8278;
-  --bio: #6b6358;
-  --footer-link: #787065;
-  --title: #2c2620;
-  --tooltip-bg: #e8e0d4;
-  --red-underline: #dc3a3a;
-  --dot-grid: rgba(160,130,90,0.08);
-  --border-subtle: rgba(120,100,70,0.15);
+  --bg: #e6dccb;
+  --text: #584f46;
+  --accent: #9a3d1e;
+  --highlight: #2e2822;
+  --muted: #8e8880;
+  --bio: #6a6358;
+  --footer-link: #7d776e;
+  --title: #1e1914;
+  --tooltip-bg: #dbd0c0;
+  --red-underline: #c42b2b;
+  --dot-grid: rgba(120, 100, 65, 0.22);
+  --border-subtle: rgba(90, 75, 50, 0.16);
+  --grain-opacity: 0.35;
+  --grain-blend: multiply;
 
   --background: var(--bg);
   --foreground: var(--text);
 }
 
-/* Dark mode */
+/* Dark mode — deep warm charcoal */
 .dark {
-  --bg: #1c1a18;
-  --text: #a5a09a;
-  --accent: #C85A35;
-  --highlight: #d6d2cc;
-  --muted: #5a5550;
-  --bio: #8a8580;
-  --footer-link: #6b655e;
-  --title: #e8e5df;
-  --tooltip-bg: #2a2420;
-  --red-underline: #ef4444;
-  --dot-grid: rgba(201,168,124,0.06);
-  --border-subtle: rgba(201,168,124,0.12);
+  --bg: #131110;
+  --text: #b5afa8;
+  --accent: #d4714e;
+  --highlight: #e5e1db;
+  --muted: #706a62;
+  --bio: #958f88;
+  --footer-link: #807a72;
+  --title: #f0ece6;
+  --tooltip-bg: #1e1c1a;
+  --red-underline: #e05050;
+  --dot-grid: rgba(180, 155, 115, 0.12);
+  --border-subtle: rgba(180, 155, 115, 0.1);
+  --grain-opacity: 0.15;
+  --grain-blend: soft-light;
 
   --background: var(--bg);
   --foreground: var(--text);
@@ -44,7 +48,8 @@
   --font-mono: var(--font-space-mono);
 }
 
-html, body {
+html,
+body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-space-mono), monospace;
@@ -52,6 +57,24 @@ html, body {
   padding: 0;
   height: 100%;
   overflow: hidden;
+}
+
+/* Suppress transitions on page load — enabled via JS after first paint */
+.theme-transition.ready,
+.theme-transition.ready h1,
+.theme-transition.ready h2,
+.theme-transition.ready p,
+.theme-transition.ready div,
+.theme-transition.ready a,
+.theme-transition.ready span:not([style*="opacity"]),
+.theme-transition.ready svg,
+.theme-transition.ready path,
+.theme-transition.ready button {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    stroke 0.4s ease;
 }
 
 /* Responsive Timeline Bar Positioning */
@@ -79,6 +102,22 @@ html, body {
     --track-offset: 70px;
     --line-height: 70px;
   }
+}
+
+/* Grain texture overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  mix-blend-mode: multiply;
+}
+
+.dark .grain-overlay {
+  mix-blend-mode: soft-light;
 }
 
 /* Hide scrollbars but allow scrolling */
