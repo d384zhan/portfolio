@@ -163,7 +163,7 @@ const projects = [
   {
     name: "rnow rewards",
     desc: "loyalty rewards product design",
-    tech: "figma · user research · prototyping",
+    tech: "figma · user research · 3rd national",
     href: null,
   },
 ];
@@ -300,7 +300,7 @@ function ProjectItem({
       }}
     >
       <div className="flex items-baseline justify-between">
-        <span className="whitespace-nowrap overflow-hidden">
+        <span className="md:whitespace-nowrap md:overflow-hidden">
           {nameEl}
           <span
             style={{
@@ -347,6 +347,7 @@ function ProjectItem({
 export default function Home() {
   const [activeTouch, setActiveTouch] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   useEffect(() => {
     requestAnimationFrame(() => setReady(true));
@@ -356,7 +357,6 @@ export default function Home() {
     <div
       className={`theme-transition${ready ? " ready" : ""} h-dvh w-full overflow-x-clip overflow-y-auto md:overflow-hidden flex justify-center items-start md:items-center relative`}
       style={{
-        backgroundColor: "var(--bg)",
         color: "var(--text)",
         fontFamily: "var(--font-space-mono), monospace",
         paddingTop: "env(safe-area-inset-top)",
@@ -380,7 +380,12 @@ export default function Home() {
               transition: "color 0.2s ease",
             }}
           >
-            <span className="relative inline-block group cursor-default">
+            <span
+              className="relative inline-block cursor-default"
+              onMouseEnter={() => setTooltipVisible(true)}
+              onMouseLeave={() => setTooltipVisible(false)}
+              onTouchEnd={(e) => { e.preventDefault(); setTooltipVisible((v) => !v); }}
+            >
               Dawang
               <svg
                 className="absolute -bottom-1 left-0 w-full"
@@ -396,13 +401,14 @@ export default function Home() {
                 />
               </svg>
               <span
-                className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap px-2.5 py-1 rounded pointer-events-none text-xs z-10"
+                className="absolute bottom-full mb-2 left-0 transition-opacity duration-300 whitespace-nowrap px-2.5 py-1 rounded pointer-events-none text-xs z-10"
                 style={{
                   backgroundColor: "var(--tooltip-bg)",
                   color: "var(--text)",
                   fontFamily: "var(--font-space-mono), monospace",
                   fontStyle: "normal",
                   fontWeight: 400,
+                  opacity: tooltipVisible ? 1 : 0,
                 }}
               >
                 大王 means &quot;emperor&quot; or &quot;big king&quot; in

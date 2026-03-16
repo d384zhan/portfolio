@@ -33,7 +33,7 @@
   --title: #f0ece6;
   --tooltip-bg: #1e1c1a;
   --red-underline: #e05050;
-  --dot-opacity: 0.1;
+  --dot-opacity: 0.18;
   --border-subtle: rgba(180, 155, 115, 0.1);
   --grain-opacity: 0.15;
   --grain-blend: soft-light;
@@ -57,6 +57,35 @@ body {
   padding: 0;
   height: 100%;
   overflow: hidden;
+}
+
+/* Dot grid overlay */
+.dot-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: radial-gradient(rgb(130, 110, 75) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: var(--dot-opacity);
+  transition: opacity 0.4s ease;
+}
+
+/* Grain texture overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  mix-blend-mode: multiply;
+  transition: opacity 0.4s ease;
+}
+
+.dark .grain-overlay {
+  mix-blend-mode: soft-light;
 }
 
 /* Suppress transitions on page load — enabled via JS after first paint */
@@ -104,34 +133,6 @@ body {
   }
 }
 
-/* Dot grid overlay — fixed color, opacity-only transition for smooth theme switch */
-.dot-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: radial-gradient(rgb(130, 110, 75) 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity: var(--dot-opacity);
-  transition: opacity 0.4s ease;
-}
-
-/* Grain texture overlay */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 128px 128px;
-  mix-blend-mode: multiply;
-  transition: opacity 0.4s ease;
-}
-
-.dark .grain-overlay {
-  mix-blend-mode: soft-light;
-}
 
 /* Hide scrollbars but allow scrolling */
 * {
