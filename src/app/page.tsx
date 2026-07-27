@@ -114,7 +114,42 @@ function useTypewriter(
   return text;
 }
 
-const experiences = [
+// Matches the scale/color easing used by ExperienceItem and ProjectItem rows,
+// so inline links feel the same as the list hovers rather than snapping.
+const LINK_TRANSITION =
+  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease";
+
+type Experience = {
+  name: string;
+  role: string;
+  year?: string;
+  detail?: string;
+};
+
+const currently: Experience[] = [
+  {
+    name: "Upfront Ventures",
+    role: "engineering (incoming)",
+    detail: "fall 2026, los angeles",
+  },
+  {
+    name: "Waterloo HX Lab",
+    role: "research",
+    detail: "shared control for haptic teleoperation",
+  },
+  {
+    name: "UWaterloo",
+    role: "management engineering",
+  },
+];
+
+const experiences: Experience[] = [
+  {
+    name: "Blair AI",
+    role: "engineering",
+    year: "2026",
+    detail: "built healthtech AI voice agents for clinical workflows",
+  },
   {
     name: "Greenhouse Juice",
     role: "engineering",
@@ -133,15 +168,21 @@ const experiences = [
     year: "2025",
     detail: "vehicle telemetry and embedded systems for solar car racing",
   },
-  {
-    name: "Sunnybrook Hospital",
-    role: "data",
-    year: "2023",
-    detail: "data analysis and visualization for finance and operations",
-  },
+  // {
+  //   name: "Sunnybrook Hospital",
+  //   role: "data",
+  //   year: "2023",
+  //   detail: "data analysis and visualization for finance and operations",
+  // },
 ];
 
 const projects = [
+  {
+    name: "lineage",
+    desc: "multiplayer provenance for coding agents",
+    tech: "typescript · bun · mcp · websockets",
+    href: "https://github.com/d384zhan/lineage",
+  },
   {
     name: "steerio",
     desc: "real-time guardrails for voice agents",
@@ -155,16 +196,10 @@ const projects = [
     href: "https://github.com/d384zhan/htv-x",
   },
   {
-    name: "familink",
-    desc: "AI family connection platform",
-    tech: "react · vite · firebase · openai",
-    href: "https://github.com/d384zhan/familink.ai",
-  },
-  {
-    name: "rnow rewards",
-    desc: "loyalty rewards product design",
-    tech: "figma · user research · 3rd national",
-    href: null,
+    name: "mgte 29 class profile",
+    desc: "class data visualization",
+    tech: "next.js · scss · charts",
+    href: "https://mgte-29-class-profile.vercel.app",
   },
 ];
 
@@ -172,10 +207,12 @@ function ExperienceItem({
   exp,
   touchOpen,
   onTouchToggle,
+  alwaysShowDetail = false,
 }: {
-  exp: (typeof experiences)[number];
+  exp: Experience;
   touchOpen: boolean;
   onTouchToggle: () => void;
+  alwaysShowDetail?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const touchUsed = useRef(false);
@@ -213,25 +250,38 @@ function ExperienceItem({
           </span>{" "}
           · {exp.role}
         </span>
-        <span style={{ color: "var(--muted)", transition: "color 0.2s ease" }}>
-          {exp.year}
-        </span>
-      </div>
-      <AnimatePresence>
-        {active && exp.detail && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="overflow-hidden"
-          >
-            <div className="text-xs pt-0.5" style={{ color: "var(--muted)" }}>
-              ↳ {exp.detail}
-            </div>
-          </motion.div>
+        {exp.year && (
+          <span style={{ color: "var(--muted)", transition: "color 0.2s ease" }}>
+            {exp.year}
+          </span>
         )}
-      </AnimatePresence>
+      </div>
+      {alwaysShowDetail ? (
+        exp.detail && (
+          <div
+            className="text-xs pt-0.5"
+            style={{ color: "var(--muted)", transition: "color 0.2s ease" }}
+          >
+            ↳ {exp.detail}
+          </div>
+        )
+      ) : (
+        <AnimatePresence>
+          {active && exp.detail && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="overflow-hidden"
+            >
+              <div className="text-xs pt-0.5" style={{ color: "var(--muted)" }}>
+                ↳ {exp.detail}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 }
@@ -382,8 +432,15 @@ export default function Home() {
           >
             <span
               className="relative inline-block cursor-default"
+              tabIndex={0}
+              aria-describedby="name-meaning"
               onMouseEnter={() => setTooltipVisible(true)}
               onMouseLeave={() => setTooltipVisible(false)}
+              onFocus={() => setTooltipVisible(true)}
+              onBlur={() => setTooltipVisible(false)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setTooltipVisible(false);
+              }}
               onTouchEnd={(e) => { e.preventDefault(); setTooltipVisible((v) => !v); }}
             >
               Dawang
@@ -401,6 +458,8 @@ export default function Home() {
                 />
               </svg>
               <span
+                id="name-meaning"
+                role="tooltip"
                 className="absolute bottom-full mb-2 left-0 transition-opacity duration-300 whitespace-nowrap px-2.5 py-1 rounded pointer-events-none text-xs z-10"
                 style={{
                   backgroundColor: "var(--tooltip-bg)",
@@ -425,23 +484,24 @@ export default function Home() {
           className="text-sm leading-relaxed mb-[3dvh]"
           style={{ color: "var(--bio)" }}
         >
-          i&apos;m currently building healthtech AI voice agents at{" "}
+          i&apos;m currently researching shared control for haptic teleoperation
+          at the{" "}
           <a
-            href="https://www.helloblair.com"
+            href="https://uwaterloo.ca/haptic-experience-lab"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "var(--accent)" }}
+            className="underline underline-offset-4 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--accent)", transition: LINK_TRANSITION }}
           >
-            blair
+            waterloo HX lab
           </a>{" "}
           and studying{" "}
           <a
             href="https://uwaterloo.ca/engineering/future-students/management-engineering"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "var(--accent)" }}
+            className="underline underline-offset-4 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--accent)", transition: LINK_TRANSITION }}
           >
             management engineering
           </a>{" "}
@@ -451,8 +511,8 @@ export default function Home() {
             href="https://letterboxd.com/dzahwa/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline underline-offset-4 transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "var(--accent)" }}
+            className="underline underline-offset-4 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--accent)", transition: LINK_TRANSITION }}
           >
             movies
           </a>
@@ -473,70 +533,19 @@ export default function Home() {
             currently
           </h2>
           <div className="space-y-1.5 text-sm">
-            <div
-              className="cursor-default"
-              style={{
-                transform: "scale(1)",
-                transition:
-                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease",
-                transformOrigin: "left center",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.02)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              <div className="flex items-baseline justify-between">
-                <span>
-                  <span
-                    style={{
-                      color: "var(--highlight)",
-                      transition: "color 0.2s ease",
-                    }}
-                  >
-                    Blair AI
-                  </span>{" "}
-                  · engineering
-                </span>
-              </div>
-              <div
-                className="text-xs pt-0.5"
-                style={{ color: "var(--muted)", transition: "color 0.2s ease" }}
-              >
-                ↳ building healthcare AI voice agents for clinical workflows
-              </div>
-            </div>
-            <div
-              className="cursor-default"
-              style={{
-                transform: "scale(1)",
-                transition:
-                  "transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), color 0.2s ease",
-                transformOrigin: "left center",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.02)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-              }}
-            >
-              <div className="flex items-baseline justify-between">
-                <span>
-                  <span
-                    style={{
-                      color: "var(--highlight)",
-                      transition: "color 0.2s ease",
-                    }}
-                  >
-                    UWaterloo
-                  </span>{" "}
-                  · management engineering
-                </span>
-              </div>
-            </div>
+            {currently.map((exp) => (
+              <ExperienceItem
+                key={exp.name}
+                exp={exp}
+                alwaysShowDetail
+                touchOpen={activeTouch === `cur-${exp.name}`}
+                onTouchToggle={() =>
+                  setActiveTouch((prev) =>
+                    prev === `cur-${exp.name}` ? null : `cur-${exp.name}`,
+                  )
+                }
+              />
+            ))}
           </div>
         </div>
 
@@ -602,31 +611,13 @@ export default function Home() {
                 href="https://github.com/d384zhan"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs transition-all duration-200 hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
-                style={{ color: "var(--muted)" }}
+                className="text-xs hover:text-[var(--accent)] inline-block hover:scale-[1.02] origin-left"
+                style={{ color: "var(--muted)", transition: LINK_TRANSITION }}
               >
                 rest of my projects →
               </a>
             </div>
           </div>
-        </div>
-
-        {/* Writing */}
-        <div className="mb-[3dvh]">
-          <h2
-            className="mb-[1dvh]"
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontStyle: "italic",
-              color: "var(--accent)",
-              fontSize: "15px",
-            }}
-          >
-            writing
-          </h2>
-          <p className="text-sm" style={{ color: "var(--muted)" }}>
-            nothing here yet — coming soon.
-          </p>
         </div>
 
         {/* Footer */}
@@ -637,8 +628,8 @@ export default function Home() {
           <div className="flex items-center gap-5 text-xs">
             <a
               href="mailto:d384zhan@uwaterloo.ca"
-              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "var(--footer-link)" }}
+              className="hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)", transition: LINK_TRANSITION }}
             >
               email
             </a>
@@ -646,8 +637,8 @@ export default function Home() {
               href="https://www.linkedin.com/in/dawang-zhang"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "var(--footer-link)" }}
+              className="hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)", transition: LINK_TRANSITION }}
             >
               linkedin
             </a>
@@ -655,8 +646,8 @@ export default function Home() {
               href="https://github.com/d384zhan"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "var(--footer-link)" }}
+              className="hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)", transition: LINK_TRANSITION }}
             >
               github
             </a>
@@ -664,16 +655,16 @@ export default function Home() {
               href="https://x.com/dawangzh"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-              style={{ color: "var(--footer-link)" }}
+              className="hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+              style={{ color: "var(--footer-link)", transition: LINK_TRANSITION }}
             >
               x
             </a>
           </div>
           <a
             href="https://v1.dawang.tech"
-            className="text-xs transition-all duration-200 hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
-            style={{ color: "var(--muted)" }}
+            className="text-xs hover:text-[var(--accent)] hover:underline underline-offset-4 inline-block hover:scale-[1.02] origin-left"
+            style={{ color: "var(--muted)", transition: LINK_TRANSITION }}
           >
             v1
           </a>

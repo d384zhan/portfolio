@@ -19,8 +19,6 @@ const playfair = Playfair_Display({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#e6dccb" },
@@ -31,19 +29,21 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.dawang.tech"),
   title: "Dawang Zhang",
-  description: "software engineer studying management engineering at waterloo.",
+  description:
+    "software engineer researching haptic teleoperation and studying management engineering at waterloo.",
   keywords: [
     "Dawang Zhang",
     "Software Engineer",
     "Management Engineering",
     "Waterloo",
+    "Haptics",
   ],
   authors: [{ name: "Dawang Zhang" }],
   creator: "Dawang Zhang",
   openGraph: {
     title: "Dawang Zhang",
     description:
-      "software engineer studying management engineering at waterloo.",
+      "software engineer researching haptic teleoperation and studying management engineering at waterloo.",
     url: "https://www.dawang.tech",
     siteName: "Dawang Zhang",
     locale: "en_US",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Dawang Zhang",
     description:
-      "software engineer studying management engineering at waterloo.",
+      "software engineer researching haptic teleoperation and studying management engineering at waterloo.",
   },
   icons: {
     icon: "/Garfield1978.png",
