@@ -1,5 +1,0 @@
-export { NavLink } from './NavLink'
-export { SocialLink } from './SocialLink'
-export { TechTag } from './TechTag'
-export { SectionDivider } from './SectionDivider'
-export { BackgroundGrid } from './BackgroundGrid'

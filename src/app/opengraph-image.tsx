@@ -1,11 +1,25 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { PHOTO } from "@/content";
 
-export const runtime = "edge";
-export const alt = "Dawang Zhang";
+// The link preview for X, iMessage, Slack, Discord and LinkedIn: the card in
+// miniature, plate on top, name and role on paper. Built once at build time.
+// X crops to 2:1 from the center, so the type stays clear of the edges.
+
+export const alt = "Dawang Zhang, engineering at Upfront Ventures";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+const asset = (...parts: string[]) => readFile(join(process.cwd(), ...parts));
+
 export default async function Image() {
+  const [photo, display, italic] = await Promise.all([
+    asset("public", PHOTO.src),
+    asset("src/app/_og", "Newsreader-Display-Medium.ttf"),
+    asset("src/app/_og", "Newsreader-Text-Italic.ttf"),
+  ]);
+
   return new ImageResponse(
     (
       <div
@@ -15,57 +29,34 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "80px",
-          backgroundColor: "#1c1a18",
-          backgroundImage:
-            "radial-gradient(rgba(201,168,124,0.06) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
+          padding: "0 80px",
+          backgroundColor: "#fbfaf7",
+          fontFamily: "Newsreader",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "72px",
-              fontStyle: "italic",
-              color: "#e8e5df",
-              fontFamily: "serif",
-              letterSpacing: "-1px",
-            }}
-          >
+        {/* eslint-disable-next-line jsx-a11y/alt-text -- decorative; the card itself carries alt text */}
+        <img
+          src={`data:image/jpeg;base64,${photo.toString("base64")}`}
+          width={1040}
+          height={320}
+          style={{ objectFit: "cover", objectPosition: PHOTO.position }}
+        />
+        <div style={{ display: "flex", alignItems: "baseline", marginTop: 44 }}>
+          <div style={{ fontSize: 76, fontWeight: 500, letterSpacing: "-0.02em", color: "#000" }}>
             Dawang Zhang
           </div>
-          <div
-            style={{
-              fontSize: "24px",
-              color: "#8a8580",
-              fontFamily: "monospace",
-              lineHeight: "1.6",
-              maxWidth: "800px",
-            }}
-          >
-            software engineer · management engineering @ waterloo
-          </div>
-          <div
-            style={{
-              fontSize: "18px",
-              color: "#C85A35",
-              fontFamily: "monospace",
-              marginTop: "8px",
-            }}
-          >
-            dawang.tech
+          <div style={{ marginLeft: 36, fontSize: 36, fontStyle: "italic", color: "#77756f" }}>
+            engineering at upfront ventures
           </div>
         </div>
       </div>
     ),
     {
       ...size,
-    }
+      fonts: [
+        { name: "Newsreader", data: display, weight: 500, style: "normal" },
+        { name: "Newsreader", data: italic, weight: 400, style: "italic" },
+      ],
+    },
   );
 }
