@@ -57,7 +57,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // the pagereveal script below may add a class to <html> before React
+    // hydrates; that's expected, so don't flag the mismatch
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* A page reached through a view transition gets its entrance from the
             transition, so it skips the first-visit wipe (see globals.css). */}

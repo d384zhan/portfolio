@@ -80,10 +80,19 @@ a {
   text-decoration: none;
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   transition: background-size var(--quick) var(--ease), color var(--quick) var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
 
-a:hover {
-  background-size: 100% 1px;
+.egg {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hover only where there is one, so a tap on a phone doesn't leave a
+   stuck underline behind */
+@media (hover: hover) {
+  a:hover {
+    background-size: 100% 1px;
+  }
 }
 
 /* in running text the rule is always there, faint, and the hover inks it */
@@ -94,9 +103,11 @@ a:hover {
   background-position: 0 100%;
 }
 
-.bio a:hover,
-.role a:hover {
-  background-size: 100% 1px, 100% 1px;
+@media (hover: hover) {
+  .bio a:hover,
+  .role a:hover {
+    background-size: 100% 1px, 100% 1px;
+  }
 }
 
 a:focus-visible,
@@ -277,8 +288,10 @@ li > a {
   color: var(--muted);
 }
 
-.more:hover {
-  color: var(--ink);
+@media (hover: hover) {
+  .more:hover {
+    color: var(--ink);
+  }
 }
 
 /* Newsreader draws its arrows large; set them down so they read as a mark,
@@ -423,6 +436,35 @@ li > a {
 
 .arrived .card {
   animation: none;
+}
+
+/* Phones get no shared elements: a scrolled page or a resizing block made
+   the plate and name visibly move. Instead the whole screen crossfades in
+   one pass. The browser blends identical pixels of the old and new screen
+   so they stay solid, so the photo and name hold perfectly still and only
+   what changed fades. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 699px) {
+  .plate,
+  .intro {
+    view-transition-name: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    mask-image: none;
+    animation: 260ms ease both;
+  }
+  ::view-transition-old(root) {
+    animation-name: fade-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: fade-in;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
