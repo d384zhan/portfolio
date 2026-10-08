@@ -7,7 +7,11 @@ export const PHOTO: { src: string; alt: string; position: string; stamp?: string
 
 export type Inline = string | { text: string; href: string };
 
-export const ROLE: Inline[] = ["Engineering at ", { text: "Upfront Ventures", href: "https://upfront.com" }];
+// Case follows color: what's in ink (name, bio, company and project names) is
+// capitalized; what's muted (role line, descriptions, roles, labels) is
+// lowercase.
+
+export const ROLE: Inline[] = ["engineering at ", { text: "upfront ventures", href: "https://upfront.com" }];
 
 export const BIO: Inline[] = [
   "I'm interested in finding problems worth solving across product and engineering. I optimize for thoughtful design and compounding impact. I enjoy watching ",
