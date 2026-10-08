@@ -4,20 +4,19 @@ import { ImageResponse } from "next/og";
 import { PHOTO } from "@/content";
 
 // The link preview for X, iMessage, Slack, Discord and LinkedIn: the card in
-// miniature, plate on top, name and role on paper. Built once at build time.
+// miniature, plate on top, name on paper. Built once at build time.
 // X crops to 2:1 from the center, so the type stays clear of the edges.
 
-export const alt = "Dawang Zhang, engineering at Upfront Ventures";
+export const alt = "Dawang Zhang";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const asset = (...parts: string[]) => readFile(join(process.cwd(), ...parts));
 
 export default async function Image() {
-  const [photo, display, italic] = await Promise.all([
+  const [photo, display] = await Promise.all([
     asset("public", PHOTO.src),
     asset("src/app/_og", "Newsreader-Display-Medium.ttf"),
-    asset("src/app/_og", "Newsreader-Text-Italic.ttf"),
   ]);
 
   return new ImageResponse(
@@ -41,13 +40,8 @@ export default async function Image() {
           height={320}
           style={{ objectFit: "cover", objectPosition: PHOTO.position }}
         />
-        <div style={{ display: "flex", alignItems: "baseline", marginTop: 44 }}>
-          <div style={{ fontSize: 76, fontWeight: 500, letterSpacing: "-0.02em", color: "#000" }}>
-            Dawang Zhang
-          </div>
-          <div style={{ marginLeft: 36, fontSize: 36, fontStyle: "italic", color: "#77756f" }}>
-            Engineering at Upfront Ventures
-          </div>
+        <div style={{ marginTop: 44, fontSize: 76, fontWeight: 500, letterSpacing: "-0.02em", color: "#000" }}>
+          Dawang Zhang
         </div>
       </div>
     ),
@@ -55,7 +49,6 @@ export default async function Image() {
       ...size,
       fonts: [
         { name: "Newsreader", data: display, weight: 500, style: "normal" },
-        { name: "Newsreader", data: italic, weight: 400, style: "italic" },
       ],
     },
   );
