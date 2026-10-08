@@ -48,7 +48,7 @@ export function Intro({ home = false, back = false }: { home?: boolean; back?: b
       {back && (
         // eslint-disable-next-line @next/next/no-html-link-for-pages -- a full load runs the view transition
         <a className="more back" href="/">
-          <span className="arrow">&larr;</span> back
+          <span className="arrow">&larr;&#xFE0E;</span> back
         </a>
       )}
     </header>
