@@ -2,7 +2,7 @@
   /* color */
   --paper: #fbfaf7;
   --ink: #000;
-  --muted: #77756f;
+  --muted: #6b6963; /* 4.9:1 on the grain, past the 4.5:1 AA minimum */
   --rule: #d2d0c9;
   --plate: #e8e7e2;
   --stamp: #ff6a1a;
@@ -23,7 +23,7 @@
   /* the home card at full size: plate, text block, three row gaps. The top
      spacer is sized from this, not from each page's own height, so the
      plate and name sit on the same pixels on every page. */
-  --card-h: calc(var(--plate-h) + 215px + 3 * var(--gap));
+  --card-h: calc(var(--plate-h) + 13.5 * var(--text) + 3 * var(--gap));
 
   /* motion */
   --ease: cubic-bezier(0.25, 0.6, 0.3, 1);
@@ -112,11 +112,13 @@ a:focus-visible,
    height first on short screens.
    ------------------------------------------------------------------ */
 
+/* The card is exactly one screen tall, so the plate shrinks before anything
+   else; when even a 110px plate can't fit (a phone on its side, heavy zoom)
+   the content overflows and the page scrolls instead of cutting it off. */
 .card {
   width: var(--col);
   height: 100dvh;
   margin: 0 auto;
-  overflow: hidden;
   padding-block: var(--pad-y);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -219,11 +221,11 @@ li > a {
   transition: opacity 160ms ease;
 }
 
-.intro:has(.egg:hover, .egg:focus-visible) .meaning {
+.intro:has(.egg:hover, .egg:focus) .meaning {
   mask-position: 0 0;
 }
 
-.intro:has(.egg:hover, .egg:focus-visible) .role {
+.intro:has(.egg:hover, .egg:focus) .role {
   opacity: 0;
 }
 
@@ -300,7 +302,7 @@ li > a {
 
 .jobs ul {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr) auto;
+  grid-template-columns: fit-content(45%) minmax(0, 1fr) auto;
   column-gap: 20px;
 }
 
@@ -380,11 +382,27 @@ li > a {
   }
 }
 
-.card,
+/* the mask exists only while the wipe runs, so it never clips anything after */
+@keyframes wipe-in {
+  from {
+    mask-image: var(--wipe);
+    mask-size: 250% 100%;
+    mask-position: 100% 0;
+  }
+  to {
+    mask-image: var(--wipe);
+    mask-size: 250% 100%;
+    mask-position: 0 0;
+  }
+}
+
+.card {
+  animation: wipe-in 900ms var(--ease) backwards;
+}
+
 ::view-transition-new(root) {
   mask-image: var(--wipe);
   mask-size: 250% 100%;
-  mask-position: 0 0;
   animation: wipe 900ms var(--ease) both;
 }
 
@@ -398,13 +416,11 @@ li > a {
 }
 
 .arrived .card {
-  mask-image: none;
   animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .card {
-    mask-image: none;
     animation: none;
   }
   a,
@@ -416,6 +432,17 @@ li > a {
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none;
+  }
+}
+
+/* big monitors: the same card, about 15% larger, so it doesn't sit small in
+   a sea of paper */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  :root {
+    --col: min(900px, 100vw - 2 * var(--pad-x));
+    --text: 18px;
+    --name: 34px;
+    --gutter: 32px;
   }
 }
 

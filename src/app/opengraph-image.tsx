@@ -46,7 +46,7 @@ export default async function Image() {
             Dawang Zhang
           </div>
           <div style={{ marginLeft: 36, fontSize: 36, fontStyle: "italic", color: "#77756f" }}>
-            engineering at upfront ventures
+            Engineering at Upfront Ventures
           </div>
         </div>
       </div>
