@@ -282,7 +282,7 @@ li > a {
 }
 
 /* Newsreader draws its arrows large; set them down so they read as a mark,
-   not a word */
+   not a word. Each arrow carries U+FE0E so iOS draws it as text, not emoji. */
 .arrow {
   font-size: 0.8em;
 }
@@ -415,6 +415,12 @@ li > a {
   animation: fade-out 200ms ease both;
 }
 
+/* if a shared piece does move or resize between pages, it gets there fast */
+::view-transition-group(*) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease);
+}
+
 .arrived .card {
   animation: none;
 }
@@ -446,7 +452,9 @@ li > a {
   }
 }
 
-/* phones: one column, the photo takes the leftover height */
+/* phones: one column. The photo is a fixed height, the same on every page,
+   so a page transition never has to resize it; spare height falls to the
+   bottom. */
 @media (max-width: 699px) {
   :root {
     --gutter: 16px;
@@ -454,7 +462,7 @@ li > a {
   }
   .card {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(110px, 1fr) auto auto auto auto;
+    grid-template-rows: clamp(120px, 28svh, 260px) auto auto auto 1fr;
     row-gap: 18px;
   }
   .card > * {

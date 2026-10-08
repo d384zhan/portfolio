@@ -25,7 +25,7 @@ export default function Home() {
           ))}
           <li>
             <a className="more" href="/work">
-              view all work <span className="arrow">&rarr;</span>
+              view all work <span className="arrow">&rarr;&#xFE0E;</span>
             </a>
           </li>
         </ul>
@@ -44,7 +44,7 @@ export default function Home() {
           ))}
           <li>
             <a className="more" href={GITHUB} target="_blank" rel="noopener noreferrer">
-              view on github <span className="arrow">&#8599;</span>
+              view on github <span className="arrow">&#8599;&#xFE0E;</span>
             </a>
           </li>
         </ul>
