@@ -242,12 +242,14 @@ li > a {
   left: 0;
   /* just under the baseline, through the descender like a real spell-check
      mark, and clear of the line below */
-  bottom: 0.1em;
+  bottom: calc(0.1em - 1px);
   width: 100%;
-  height: 4px;
+  height: 6px;
   background-color: var(--squiggle);
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4'%3E%3Cpath d='M0 3 Q2 0.6 4 3 T8 3' fill='none' stroke='%23000' stroke-width='1.3'/%3E%3C/svg%3E")
-    repeat-x 0 0 / 8px 4px;
+  /* one wave per 8px tile; the tile is tall enough for the crest and the
+     trough plus the stroke, so neither gets clipped */
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6'%3E%3Cpath d='M0 3 Q2 0.5 4 3 T8 3' fill='none' stroke='%23000' stroke-width='1.3'/%3E%3C/svg%3E")
+    repeat-x 0 0 / 8px 6px;
   transition: background-color var(--quick) var(--ease);
   animation: squiggle 700ms var(--ease) 600ms backwards;
 }
