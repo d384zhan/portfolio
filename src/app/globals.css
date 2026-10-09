@@ -238,27 +238,29 @@ li > a {
 .squiggle {
   position: absolute;
   left: 0;
-  bottom: -0.3em;
+  bottom: -0.28em;
   width: 100%;
-  height: 6px;
+  height: 4px;
   overflow: visible;
+  z-index: 1;
   color: var(--squiggle);
   pointer-events: none;
   transition: color var(--quick) var(--ease);
-}
-
-.squiggle path {
-  stroke-dasharray: 1;
+  /* the wave is always fully drawn; a clip opening left to right reveals
+     it (Safari mis-draws the stroke-dash version of this) */
   animation: squiggle 700ms var(--ease) 600ms backwards;
 }
 
 @keyframes squiggle {
   from {
-    stroke-dashoffset: 1;
+    clip-path: inset(-2px 100% -2px 0);
+  }
+  to {
+    clip-path: inset(-2px 0 -2px 0);
   }
 }
 
-.arrived .squiggle path {
+.arrived .squiggle {
   animation: none;
 }
 
@@ -528,7 +530,7 @@ li > a {
   .squiggle {
     transition: none;
   }
-  .squiggle path {
+  .squiggle {
     animation: none;
   }
   ::view-transition-group(*),

@@ -26,13 +26,14 @@ export function Intro({ home = false, back = false }: { home?: boolean; back?: b
           <>
             <span className="egg" tabIndex={0} aria-describedby="meaning">
               Dawang
-              <svg className="squiggle" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden="true">
+              {/* a tight, even wave, like a spell-check mark: 32 half-waves */}
+              <svg className="squiggle" viewBox="0 0 120 6" preserveAspectRatio="none" aria-hidden="true">
                 <path
-                  d="M0 4 Q7.5 0 15 4 T30 4 T45 4 T60 4 T75 4 T90 4 T105 4 T120 4"
-                  pathLength={1}
+                  d="M0 3 Q1.875 1 3.75 3 T7.5 3 T11.25 3 T15 3 T18.75 3 T22.5 3 T26.25 3 T30 3 T33.75 3 T37.5 3 T41.25 3 T45 3 T48.75 3 T52.5 3 T56.25 3 T60 3 T63.75 3 T67.5 3 T71.25 3 T75 3 T78.75 3 T82.5 3 T86.25 3 T90 3 T93.75 3 T97.5 3 T101.25 3 T105 3 T108.75 3 T112.5 3 T116.25 3 T120 3"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={1.6}
+                  strokeLinecap="round"
                   vectorEffect="non-scaling-stroke"
                 />
               </svg>
