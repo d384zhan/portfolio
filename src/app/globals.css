@@ -216,7 +216,6 @@ li > a {
 
 .sub {
   display: grid;
-  margin-top: 4px;
   font-style: italic;
   color: var(--muted);
 }
@@ -227,34 +226,50 @@ li > a {
 
 /* Hovering "Dawang" swaps the role line for what the name means, wiped in
    left to right like everything else; no tooltip box to clip. */
-/* A spell-check squiggle under "Dawang": the browser seems to flag the
-   name, and hovering explains it. It's the browser's own wavy underline, so
-   it sits on the text's real baseline and scales with it. It fades in after
-   the page arrives and goes quiet once the meaning shows. */
+/* A squiggle under "Dawang", like a spell-check flag on an unfamiliar
+   word; hovering explains it. It's a small SVG wave below the descenders,
+   drawn in left to right after the page arrives, gone quiet once the
+   meaning shows. */
 .egg {
+  position: relative;
   cursor: default;
-  text-decoration: underline wavy var(--squiggle);
-  /* the wave's height grows with its thickness; 1px keeps it a fine mark */
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.12em;
-  text-decoration-skip-ink: none;
-  transition: text-decoration-color var(--quick) var(--ease);
-  animation: squiggle 600ms ease 700ms backwards;
+}
+
+.squiggle {
+  position: absolute;
+  left: 0;
+  bottom: -0.3em;
+  width: 100%;
+  height: 6px;
+  overflow: visible;
+  color: var(--squiggle);
+  pointer-events: none;
+  transition: color var(--quick) var(--ease);
+}
+
+.squiggle path {
+  stroke-dasharray: 1;
+  animation: squiggle 700ms var(--ease) 600ms backwards;
 }
 
 @keyframes squiggle {
   from {
-    text-decoration-color: transparent;
+    stroke-dashoffset: 1;
   }
 }
 
-.arrived .egg {
+.arrived .squiggle path {
   animation: none;
 }
 
-.egg:hover,
-.egg:focus {
-  text-decoration-color: var(--rule);
+.egg:hover .squiggle,
+.egg:focus .squiggle {
+  color: var(--rule);
+}
+
+/* a little more room under the name so the squiggle has air */
+.sub {
+  margin-top: 8px;
 }
 
 .meaning {
@@ -510,10 +525,10 @@ li > a {
   a,
   .meaning,
   .role,
-  .egg {
+  .squiggle {
     transition: none;
   }
-  .egg {
+  .squiggle path {
     animation: none;
   }
   ::view-transition-group(*),
