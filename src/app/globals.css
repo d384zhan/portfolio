@@ -1,144 +1,606 @@
-@import "tailwindcss";
-
-/* Light mode (default) — warm kraft paper */
 :root {
-  --bg: #e6dccb;
-  --text: #584f46;
-  --accent: #9a3d1e;
-  --highlight: #2e2822;
-  --muted: #8e8880;
-  --bio: #6a6358;
-  --footer-link: #7d776e;
-  --title: #1e1914;
-  --tooltip-bg: #dbd0c0;
-  --red-underline: #c42b2b;
-  --dot-opacity: 0.22;
-  --border-subtle: rgba(90, 75, 50, 0.16);
-  --grain-opacity: 0.35;
-  --grain-blend: multiply;
+  /* color */
+  --paper: #fbfaf7;
+  --ink: #000;
+  --muted: #6b6963; /* 4.9:1 on the grain, past the 4.5:1 AA minimum */
+  --rule: #d2d0c9;
+  --plate: #e8e7e2;
+  --stamp: #ff6a1a;
+  --squiggle: #d4483b;
 
-  --background: var(--bg);
-  --foreground: var(--text);
+  /* type */
+  --text: 16px;
+  --leading: 1.45;
+  --name: 30px;
+
+  /* space */
+  /* the notch and home indicator add to the padding where they exist */
+  --pad-x: calc(clamp(20px, 3.3vw, 48px) + max(env(safe-area-inset-left), env(safe-area-inset-right)));
+  --pad-y: calc(clamp(20px, 5.3vh, 48px) + max(env(safe-area-inset-top), env(safe-area-inset-bottom)));
+  --col: min(780px, 100vw - 2 * var(--pad-x));
+  --gutter: 28px;
+  --gap: clamp(18px, 3.4vh, 32px);
+  --row: clamp(3px, 0.8vh, 7px);
+  --plate-h: calc(var(--col) / 3.2);
+  /* the home card at full size: plate, text block, three row gaps. The top
+     spacer is sized from this, not from each page's own height, so the
+     plate and name sit on the same pixels on every page. */
+  --card-h: calc(var(--plate-h) + 13.5 * var(--text) + 3 * var(--gap));
+
+  /* motion */
+  --ease: cubic-bezier(0.25, 0.6, 0.3, 1);
+  --quick: 320ms;
+  --wipe: linear-gradient(to right, #000 40%, transparent 60%);
 }
 
-/* Dark mode — deep warm charcoal */
-.dark {
-  --bg: #131110;
-  --text: #b5afa8;
-  --accent: #d4714e;
-  --highlight: #e5e1db;
-  --muted: #706a62;
-  --bio: #958f88;
-  --footer-link: #807a72;
-  --title: #f0ece6;
-  --tooltip-bg: #1e1c1a;
-  --red-underline: #e05050;
-  --dot-opacity: 0.18;
-  --border-subtle: rgba(180, 155, 115, 0.1);
-  --grain-opacity: 0.15;
-  --grain-blend: soft-light;
-
-  --background: var(--bg);
-  --foreground: var(--text);
+*,
+::before,
+::after {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-mono: var(--font-space-mono);
-}
-
+/* No rubber-band bounce past the edges: the card should feel like a card.
+   Pages that are taller than the screen still scroll normally. */
 html,
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-space-mono), monospace;
   margin: 0;
+  overscroll-behavior: none;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Cotton card stock: a near-white ground with faint paper grain multiplied
+   over it. Grain is ambientCG Paper001 (CC0), greyscaled into a 600px tile. */
+body {
+  color: var(--ink);
+  background: var(--paper) url("/paper.webp") 0 0 / 600px 600px;
+  background-blend-mode: multiply;
+  /* next/font defines --font-newsreader on body */
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-size: var(--text);
+  line-height: var(--leading);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+h1,
+h2,
+p,
+ul,
+figure {
+  margin: 0;
+}
+
+ul {
   padding: 0;
-  height: 100%;
+  list-style: none;
+}
+
+/* Links underline on hover with a 1px rule drawn left to right, the same
+   direction everything else on the site moves. */
+a {
+  color: inherit;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size var(--quick) var(--ease), color var(--quick) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.egg {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hover only where there is one, so a tap on a phone doesn't leave a
+   stuck underline behind */
+@media (hover: hover) {
+  a:hover {
+    background-size: 100% 1px;
+  }
+}
+
+/* in running text the rule is always there, faint, and the hover inks it */
+.bio a,
+.role a {
+  background-image: linear-gradient(currentColor, currentColor), linear-gradient(var(--rule), var(--rule));
+  background-size: 0 1px, 100% 1px;
+  background-position: 0 100%;
+}
+
+@media (hover: hover) {
+  .bio a:hover,
+  .role a:hover {
+    background-size: 100% 1px, 100% 1px;
+  }
+}
+
+a:focus-visible,
+.egg:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------
+   One viewport. A landscape card on three columns, left aligned, every
+   block starting on one of three edges. The plate leads; under it
+   name and links | bio, then previously | projects. The plate gives up
+   height first on short screens.
+   ------------------------------------------------------------------ */
+
+/* The card is exactly one screen tall, so the plate shrinks before anything
+   else; when even a 110px plate can't fit (a phone on its side, heavy zoom)
+   the content overflows and the page scrolls instead of cutting it off. */
+.card {
+  width: var(--col);
+  height: 100dvh;
+  margin: 0 auto;
+  padding-block: var(--pad-y);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: var(--edge) minmax(110px, var(--plate-h)) auto auto 1fr;
+  --edge: max(0px, (100dvh - 2 * var(--pad-y) - var(--card-h)) / 2);
+  column-gap: var(--gutter);
+  row-gap: var(--gap);
+}
+
+.plate {
+  grid-area: 2 / 1 / 3 / -1;
+}
+.intro {
+  grid-area: 3 / 1;
+}
+.bio {
+  grid-area: 3 / 2 / 4 / -1;
+  max-width: 50ch;
+  text-wrap: pretty;
+}
+.previously {
+  grid-area: 4 / 1;
+}
+.projects {
+  grid-area: 4 / 2 / 5 / -1;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  margin-top: 14px;
+}
+
+/* a link in a grid cell would stretch to the cell; keep its underline the
+   length of its text */
+li > a {
+  justify-self: start;
+}
+
+/* photo: absolutely placed so it fills its grid row exactly */
+.plate {
+  position: relative;
   overflow: hidden;
+  background: var(--plate);
 }
 
-/* Dot grid overlay */
-.dot-overlay {
-  position: fixed;
+.plate img {
+  position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.stamp {
+  position: absolute;
+  right: 10px;
+  bottom: 7px;
+  font: 11px ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  color: var(--stamp);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--stamp) 55%, transparent);
   pointer-events: none;
-  z-index: 0;
-  background-image: radial-gradient(rgb(130, 110, 75) 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity: var(--dot-opacity);
-  transition: opacity 0.4s ease;
 }
 
-/* Grain texture overlay */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
+/* name, and the italic line under it */
+.name {
+  font-size: var(--name);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.sub {
+  display: grid;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.sub > * {
+  grid-area: 1 / 1;
+}
+
+/* Hovering "Dawang" swaps the role line for what the name means, wiped in
+   left to right like everything else; no tooltip box to clip. */
+/* A squiggle under "Dawang", like a spell-check flag on an unfamiliar
+   word; hovering explains it. Measured against Newsreader: the baseline sits
+   0.74em from the top of the line box, and the wave's center line runs
+   0.17em below it. It stops before the "g" so nothing crosses it. The
+   stroke itself lives in Card.tsx. */
+.egg {
+  position: relative;
+  cursor: default;
+}
+
+.squiggle {
+  position: absolute;
+  left: 0;
+  top: 0.81em;
+  width: 2.72em;
+  height: 0.2em;
+  overflow: visible;
+  color: var(--squiggle);
   pointer-events: none;
-  z-index: 50;
-  opacity: var(--grain-opacity);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 128px 128px;
-  mix-blend-mode: multiply;
-  transition: opacity 0.4s ease;
+  transition: color var(--quick) var(--ease);
+  /* the wave is always fully drawn; a clip opening left to right reveals
+     it (Safari mis-draws the stroke-dash version of this) */
+  animation: squiggle 700ms var(--ease) 600ms backwards;
 }
 
-.dark .grain-overlay {
-  mix-blend-mode: soft-light;
-}
-
-/* Suppress transitions on page load — enabled via JS after first paint */
-.theme-transition.ready,
-.theme-transition.ready h1,
-.theme-transition.ready h2,
-.theme-transition.ready p,
-.theme-transition.ready div,
-.theme-transition.ready a,
-.theme-transition.ready span:not([style*="opacity"]),
-.theme-transition.ready svg,
-.theme-transition.ready path,
-.theme-transition.ready button {
-  transition:
-    background-color 0.4s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    stroke 0.2s ease;
-}
-
-/* Responsive Timeline Bar Positioning */
-.timeline-bar {
-  --track-offset: 45px;
-  --line-height: 45px;
-}
-
-@media (min-width: 640px) {
-  .timeline-bar {
-    --track-offset: 52px;
-    --line-height: 52px;
+@keyframes squiggle {
+  from {
+    clip-path: inset(-2px 100% -2px 0);
+  }
+  to {
+    clip-path: inset(-2px 0 -2px 0);
   }
 }
 
-@media (min-width: 768px) {
-  .timeline-bar {
-    --track-offset: 60px;
-    --line-height: 60px;
+.arrived .squiggle {
+  animation: none;
+}
+
+.egg:hover .squiggle,
+.egg:focus .squiggle {
+  color: var(--rule);
+}
+
+/* a little more room under the name so the squiggle has air */
+.sub {
+  margin-top: 8px;
+}
+
+.meaning {
+  mask-image: var(--wipe);
+  mask-size: 250% 100%;
+  mask-position: 100% 0;
+  transition: mask-position 500ms var(--ease);
+}
+
+.role {
+  transition: opacity 160ms ease;
+}
+
+.intro:has(.egg:hover, .egg:focus) .meaning {
+  mask-position: 0 0;
+}
+
+.intro:has(.egg:hover, .egg:focus) .role {
+  opacity: 0;
+}
+
+/* Lists. Previously reads like a CV: company left, year right. Projects is
+   a small table on the subgrid, so each description starts on the third
+   column edge. */
+.label {
+  margin-bottom: 6px;
+  font-size: inherit;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.previously li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.year {
+  color: var(--muted);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.projects,
+.projects ul,
+.projects li {
+  display: grid;
+  grid-template-columns: subgrid;
+  align-content: start;
+}
+
+.projects .label,
+.projects ul,
+.projects li {
+  grid-column: 1 / -1;
+}
+
+.detail {
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* the quiet way through: "view all", "back" */
+.more {
+  justify-self: start;
+  color: var(--muted);
+}
+
+@media (hover: hover) {
+  .more:hover {
+    color: var(--ink);
   }
 }
 
-@media (min-width: 1024px) {
-  .timeline-bar {
-    --track-offset: 70px;
-    --line-height: 70px;
-  }
+/* Newsreader draws its arrows large; set them down so they read as a mark,
+   not a word. Each arrow carries U+FE0E so iOS draws it as text, not emoji. */
+.arrow {
+  font-size: 0.8em;
 }
 
-
-/* Hide scrollbars but allow scrolling */
-* {
-  scrollbar-width: none;
+/* /work: the card with every role where the bio and lists sit, inside the
+   bio's two columns. One line each: company, role, dates flush right, the
+   roles lined up on one edge. */
+.jobs {
+  grid-area: 3 / 2 / 5 / -1;
 }
 
-::-webkit-scrollbar {
+/* on /work, the way back sits under the name, top left */
+.back {
+  display: inline-block;
+  margin-top: 14px;
+}
+
+.jobs ul {
+  display: grid;
+  grid-template-columns: fit-content(45%) minmax(0, 1fr) auto;
+  column-gap: 20px;
+}
+
+.job {
+  display: contents;
+}
+
+.job .year {
+  text-align: right;
+}
+
+.job-more {
+  grid-column: 2 / -1;
+  max-width: 50ch;
+  margin-bottom: 6px;
+}
+
+.job-more summary {
+  width: fit-content;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.job-more summary::-webkit-details-marker {
   display: none;
+}
+
+.job-more summary::after {
+  content: " +";
+}
+
+.job-more[open] summary::after {
+  content: " \2212";
+}
+
+.job-more summary:hover {
+  color: var(--ink);
+}
+
+.job-more p {
+  margin-top: 8px;
+}
+
+/* ------------------------------------------------------------------
+   Motion. A first visit wipes the card in left to right: a gradient mask
+   wider than the card slides across, so text resolves in reading order.
+   Moving between pages is a cross-document view transition: the plate and
+   the name block are named, so they hold still, the old middle fades out
+   and the new one wipes in. A small script in layout.tsx marks pages that
+   arrive through a transition, so they skip the first-visit wipe.
+   ------------------------------------------------------------------ */
+
+@view-transition {
+  navigation: auto;
+}
+
+.plate {
+  view-transition-name: plate;
+}
+.intro {
+  view-transition-name: intro;
+}
+
+@keyframes wipe {
+  from {
+    mask-position: 100% 0;
+  }
+  to {
+    mask-position: 0 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* the mask exists only while the wipe runs, so it never clips anything after */
+@keyframes wipe-in {
+  from {
+    mask-image: var(--wipe);
+    mask-size: 250% 100%;
+    mask-position: 100% 0;
+  }
+  to {
+    mask-image: var(--wipe);
+    mask-size: 250% 100%;
+    mask-position: 0 0;
+  }
+}
+
+.card {
+  animation: wipe-in 900ms var(--ease) backwards;
+}
+
+::view-transition-new(root) {
+  mask-image: var(--wipe);
+  mask-size: 250% 100%;
+  animation: wipe 900ms var(--ease) both;
+}
+
+::view-transition-new(root) {
+  animation-duration: 700ms;
+  animation-delay: 120ms;
+}
+
+::view-transition-old(root) {
+  animation: fade-out 200ms ease both;
+}
+
+/* if a shared piece does move or resize between pages, it gets there fast */
+::view-transition-group(*) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease);
+}
+
+.arrived .card {
+  animation: none;
+}
+
+/* Phones get no shared elements: a scrolled page or a resizing block made
+   the plate and name visibly move. Instead the whole screen crossfades in
+   one pass. The browser blends identical pixels of the old and new screen
+   so they stay solid, so the photo and name hold perfectly still and only
+   what changed fades. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 699px) {
+  .plate,
+  .intro {
+    view-transition-name: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    mask-image: none;
+    animation: 260ms ease both;
+  }
+  ::view-transition-old(root) {
+    animation-name: fade-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: fade-in;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+  a,
+  .meaning,
+  .role,
+  .squiggle {
+    transition: none;
+  }
+  .squiggle {
+    animation: none;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+}
+
+/* big monitors: the same card, about 15% larger, so it doesn't sit small in
+   a sea of paper */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  :root {
+    --col: min(900px, 100vw - 2 * var(--pad-x));
+    --text: 18px;
+    --name: 34px;
+    --gutter: 32px;
+  }
+}
+
+/* phones: one column. The photo is a fixed height, the same on every page,
+   so a page transition never has to resize it; spare height falls to the
+   bottom. */
+@media (max-width: 699px) {
+  :root {
+    --gutter: 16px;
+    --name: 24px;
+  }
+  .card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: clamp(120px, 28svh, 260px) auto auto auto 1fr;
+    row-gap: 18px;
+  }
+  .card > * {
+    grid-area: auto / 1 / auto / -1;
+  }
+  /* /work on a phone: company and dates on one line, role under them */
+  .jobs ul {
+    display: block;
+  }
+  .job {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+    padding-bottom: var(--row);
+  }
+  .job .detail {
+    grid-area: 2 / 1 / 3 / -1;
+    white-space: normal;
+  }
+  .job .year {
+    grid-area: 1 / 2;
+  }
+}
+
+/* short phones: previously and projects side by side, names only */
+@media (max-width: 699px) and (max-height: 740px) {
+  .card > .previously {
+    grid-column: 1;
+  }
+  .card > .projects {
+    grid-column: 2;
+    display: block;
+  }
+  .projects ul,
+  .projects li {
+    display: block;
+  }
+  .previously .year,
+  .projects .detail {
+    display: none;
+  }
 }
