@@ -227,46 +227,34 @@ li > a {
 
 /* Hovering "Dawang" swaps the role line for what the name means, wiped in
    left to right like everything else; no tooltip box to clip. */
-.egg {
-  position: relative;
-  cursor: default;
-}
-
 /* A spell-check squiggle under "Dawang": the browser seems to flag the
-   name, and hovering explains it. It draws in left to right after the
-   page arrives, and goes quiet once the meaning shows. The wave is a mask
-   so its color can change. */
-.egg::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  /* just under the baseline, through the descender like a real spell-check
-     mark, and clear of the line below */
-  bottom: calc(0.1em - 1px);
-  width: 100%;
-  height: 6px;
-  background-color: var(--squiggle);
-  /* one wave per 8px tile; the tile is tall enough for the crest and the
-     trough plus the stroke, so neither gets clipped */
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6'%3E%3Cpath d='M0 3 Q2 0.5 4 3 T8 3' fill='none' stroke='%23000' stroke-width='1.3'/%3E%3C/svg%3E")
-    repeat-x 0 0 / 8px 6px;
-  transition: background-color var(--quick) var(--ease);
-  animation: squiggle 700ms var(--ease) 600ms backwards;
+   name, and hovering explains it. It's the browser's own wavy underline, so
+   it sits on the text's real baseline and scales with it. It fades in after
+   the page arrives and goes quiet once the meaning shows. */
+.egg {
+  cursor: default;
+  text-decoration: underline wavy var(--squiggle);
+  /* the wave's height grows with its thickness; 1px keeps it a fine mark */
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.12em;
+  text-decoration-skip-ink: none;
+  transition: text-decoration-color var(--quick) var(--ease);
+  animation: squiggle 600ms ease 700ms backwards;
 }
 
 @keyframes squiggle {
   from {
-    width: 0;
+    text-decoration-color: transparent;
   }
 }
 
-.arrived .egg::after {
+.arrived .egg {
   animation: none;
 }
 
-.egg:hover::after,
-.egg:focus::after {
-  background-color: var(--rule);
+.egg:hover,
+.egg:focus {
+  text-decoration-color: var(--rule);
 }
 
 .meaning {
@@ -522,10 +510,10 @@ li > a {
   a,
   .meaning,
   .role,
-  .egg::after {
+  .egg {
     transition: none;
   }
-  .egg::after {
+  .egg {
     animation: none;
   }
   ::view-transition-group(*),
