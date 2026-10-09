@@ -26,6 +26,16 @@ export function Intro({ home = false, back = false }: { home?: boolean; back?: b
           <>
             <span className="egg" tabIndex={0} aria-describedby="meaning">
               Dawang
+              <svg className="squiggle" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden="true">
+                <path
+                  d="M0 4 Q7.5 0 15 4 T30 4 T45 4 T60 4 T75 4 T90 4 T105 4 T120 4"
+                  pathLength={1}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.6}
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
             </span>{" "}
             Zhang
           </>
