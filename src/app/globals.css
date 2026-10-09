@@ -13,8 +13,9 @@
   --name: 30px;
 
   /* space */
-  --pad-x: clamp(20px, 3.3vw, 48px);
-  --pad-y: clamp(20px, 5.3vh, 48px);
+  /* the notch and home indicator add to the padding where they exist */
+  --pad-x: calc(clamp(20px, 3.3vw, 48px) + max(env(safe-area-inset-left), env(safe-area-inset-right)));
+  --pad-y: calc(clamp(20px, 5.3vh, 48px) + max(env(safe-area-inset-top), env(safe-area-inset-bottom)));
   --col: min(780px, 100vw - 2 * var(--pad-x));
   --gutter: 28px;
   --gap: clamp(18px, 3.4vh, 32px);
@@ -37,9 +38,17 @@
   box-sizing: border-box;
 }
 
+/* No rubber-band bounce past the edges: the card should feel like a card.
+   Pages that are taller than the screen still scroll normally. */
 html,
 body {
   margin: 0;
+  overscroll-behavior: none;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Cotton card stock: a near-white ground with faint paper grain multiplied
