@@ -16,7 +16,7 @@ export const ROLE: Inline[] = ["engineering at ", { text: "upfront ventures", hr
 export const BIO: Inline[] = [
   "I'm interested in finding problems worth solving across product and engineering. I optimize for thoughtful design and compounding impact. I enjoy watching ",
   { text: "movies", href: "https://letterboxd.com/dzahwa/" },
-  ", catching sunsets and staying active.",
+  ", catching sunsets, and staying active.",
 ];
 
 // The first role is the one under the name, so the card's "previously" list
