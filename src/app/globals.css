@@ -274,7 +274,9 @@ li > a {
   margin-top: 8px;
 }
 
+/* it sits on top of the role line, so it lets clicks through to the link */
 .meaning {
+  pointer-events: none;
   mask-image: var(--wipe);
   mask-size: 250% 100%;
   mask-position: 100% 0;
