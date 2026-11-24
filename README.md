@@ -1,4 +1,4 @@
-# dawang.tech
+# dawangzhang.com
 
 Personal site. Next.js (App Router), no CSS framework, one typeface
 (Newsreader).

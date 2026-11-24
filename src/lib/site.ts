@@ -1,7 +1,7 @@
 // The site lives at the apex domain; www redirects there, so every URL in
 // the metadata, sitemap and structured data uses the apex. Pointing crawlers
 // at a redirect splits the signal between the two hosts.
-export const SITE = "https://dawang.tech";
+export const SITE = "https://dawangzhang.com";
 
 export const DESCRIPTION =
   "Dawang Zhang builds software at Upfront Ventures, researches haptic teleoperation at the Waterloo HX Lab, and studies management engineering at Waterloo.";
